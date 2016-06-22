@@ -7,8 +7,10 @@ import {
 } from 'react-native';
 var RNFS = require('react-native-fs');
 var Sound = require('react-native-sound');
+var store = require('react-native-simple-store');
 
 import Button from './components/button';
+import Audio from './components/audio';
 
 // Can sync audio files to the RNFS.DocumentDirectoryPath.
 // Can't play OGG files...
@@ -29,7 +31,8 @@ export default class Audios extends Component {
     super(props);
 
     this.state = {
-      audios: [],
+      files: [],
+      audios: {},
       currentAudio: undefined,
       currentAudioName: '',
       audioProgress: 0,
@@ -37,26 +40,51 @@ export default class Audios extends Component {
   }
 
   componentDidMount() {
+    // this.syncFiles();
     RNFS.readDir(RNFS.DocumentDirectoryPath)
-      .then((audios) => {
-        console.log('audios:', audios);
-        // RNFS.unlink(audios[1].path);
+      .then((files) => {
+        files = this.removeStoreFile(files);
 
-        // TODO:as Get progress time from local store and set Audio's progressBar.
-        // TODO:as Save audio details into the store.  Name, duration, playbackTime, etc.
+        var audios = this.state.audios;
+        files.forEach((file) => {
+          var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
+            if (e) {
+              console.log('error', e);
+            }
 
-        this.setState({audios})
+            file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
+            file.duration = s.getDuration();
+            audios[file.slug] = file;
+
+            this.setState({audios: audios});
+            s.release();
+          })
+        })
       });
   }
 
-  setAudio(idx) {
-    // AudioPlayer.play(this.state.audios[idx].path);
+  removeStoreFile(files) {
+    // Remove the RCTAsyncLocalStorage_V1 entry.
+    var storeIdx = files.findIndex((file) => {
+      if (file.name == 'RCTAsyncLocalStorage_V1') {
+        return true;
+      }
+    })
+    if (storeIdx != -1) {
+      files.splice(storeIdx, 1);
+    }
+    return files;
+  }
+
+  setAudio(slug) {
+    console.log('slug:', slug);
     if (this.state.currentAudio == undefined) {
-      this.setCurrentAudio(this.state.audios[idx]);
-    } else if (this.state.currentAudioName != this.state.audios[idx].name) {
+      console.log('this.state.audios[slug]:', this.state.audios[slug]);
+      this.setCurrentAudio(this.state.audios[slug]);
+    } else if (this.state.currentAudioName != this.state.audios[slug].name) {
       this.state.currentAudio.stop();
       this.state.currentAudio.release();
-      this.setCurrentAudio(this.state.audios[idx]);
+      this.setCurrentAudio(this.state.audios[slug]);
     } else {
       this.play();
     }
@@ -76,12 +104,6 @@ export default class Audios extends Component {
     });
   }
 
-  setProgress(value) {
-    console.log('value:', value);
-    this.setState({audioProgress: value}, () => {
-      this.state.currentAudio.setCurrentTime(value);
-    })
-  }
 
   play() {
     console.log('currentAudio.getDuration:', this.state.currentAudio.getDuration());
@@ -105,14 +127,10 @@ export default class Audios extends Component {
         </Text>
 
         {
-          this.state.audios.map((audio, idx) => {
+          Object.keys(this.state.audios).map((key) => {
             return (
-              <View key={audio.name}>
-                <Text style={styles.instructions}>{audio.name}</Text>
-
-                <Button text={'Play/Pause'} onPress={this.setAudio.bind(this, idx)} idx={idx} />
-
-                <Slider value={this.state.audioProgress} maximumValue={197} onSlidingComplete={(value) => this.setProgress(value)} />
+              <View key={key}>
+                <Audio audio={this.state.audios[key]} setAudio={this.setAudio.bind(this)} />
               </View>
             )
           })

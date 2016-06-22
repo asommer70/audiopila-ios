@@ -10,6 +10,7 @@
     "react-native": "^0.27.2",
     "react-native-fs": "^1.5.1",
     "react-native-router-flux": "^3.30.0",
+    "react-native-simple-store": "^1.0.1",
     "react-native-sound": "^0.8.3"
   }
 }
