@@ -145,10 +145,6 @@ export default class Audios extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Audios List
-        </Text>
-
         {
           Object.keys(this.state.audios).map((key) => {
             return (
@@ -169,12 +165,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
   },
 
   instructions: {
