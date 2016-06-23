@@ -15,7 +15,7 @@ export default class Audio extends Component {
 
     this.state = {
       currentAudio: undefined,
-      playbackTime: 0,
+      playbackTime: this.props.audio.playbackTime,
     }
   }
 

@@ -35,7 +35,6 @@ export default class Audios extends Component {
       audios: {},
       currentAudio: undefined,
       currentAudioName: '',
-      audioProgress: 0,
     }
   }
 
@@ -54,10 +53,22 @@ export default class Audios extends Component {
 
             file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
             file.duration = s.getDuration();
-            audios[file.slug] = file;
 
-            this.setState({audios: audios});
-            s.release();
+            // Get the playbackTime.
+            store.get(file.slug)
+              .then((audio) => {
+                if (audio != null) {
+                  file.playbackTime = audio.playbackTime;
+                } else {
+                  file.playbackTime = 0;
+                  store.save(file.slug, file);
+                }
+
+                audios[file.slug] = file;
+
+                this.setState({audios: audios});
+                s.release();
+              })
           })
         })
       });
@@ -77,9 +88,7 @@ export default class Audios extends Component {
   }
 
   setAudio(slug) {
-    console.log('slug:', slug);
     if (this.state.currentAudio == undefined) {
-      console.log('this.state.audios[slug]:', this.state.audios[slug]);
       this.setCurrentAudio(this.state.audios[slug]);
     } else if (this.state.currentAudioName != this.state.audios[slug].name) {
       this.state.currentAudio.stop();
@@ -96,7 +105,8 @@ export default class Audios extends Component {
         console.log('error', e);
         this.setState({currentAudio: undefined});
       } else {
-        // console.log('duration', s.getDuration());
+        audio.slug = audioFile.slug;
+        audio.setCurrentTime(audioFile.playbackTime);
         this.setState({currentAudio: audio, currentAudioName: audioFile.name}, () => {
           this.play();
         });
@@ -112,13 +122,20 @@ export default class Audios extends Component {
   }
 
   play() {
-    console.log('currentAudio.getDuration:', this.state.currentAudio.getDuration());
     this.state.currentAudio.getCurrentTime((seconds, isPlaying) => {
-      console.log('seconds:', seconds, 'isPlaying:', isPlaying);
       if (isPlaying == true) {
         this.state.currentAudio.pause();
-        this.setState({audioProgress: seconds});
 
+        // Save playbackTime to store.
+        console.log('this.state.currentAudio.slug:', this.state.currentAudio);
+        console.log('this.state.audios:', this.state.audios);
+        store.get(this.state.currentAudio.slug)
+          .then((audio) => {
+            console.log('audio:', audio);
+            if (audio != null) {
+              store.update(audio.slug, {playbackTime: seconds});
+            }
+          })
       } else {
         this.state.currentAudio.play();
       }
