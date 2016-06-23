@@ -12,20 +12,6 @@ var store = require('react-native-simple-store');
 import Button from './components/button';
 import Audio from './components/audio';
 
-// Can sync audio files to the RNFS.DocumentDirectoryPath.
-// Can't play OGG files...
-
-// RNFS.downloadFile({
-//   fromUrl: 'http://localhost:8080/01%20Keep%20Your%20Hands%20Off%20Her.mp3',
-//   // fromUrl: 'http://localhost:8080/01%20Babel.mp3',
-//   toFile: RNFS.DocumentDirectoryPath + '/Keep_Your_Hands_Off_Her.mp3',
-//   // toFile: RNFS.DocumentDirectoryPath + '/Babel.mp3',
-// }).then((res, error) => {
-//   console.log('res:', res, 'error:', error);
-// }).catch((error) => {
-//   console.log('error:', error);
-// })
-
 export default class Audios extends Component {
   constructor(props) {
     super(props);
