@@ -104,6 +104,12 @@ export default class Audios extends Component {
     });
   }
 
+  setProgress(value) {
+    console.log('value:', value);
+    this.setState({playbackTime: value}, () => {
+      this.state.currentAudio.setCurrentTime(value);
+    })
+  }
 
   play() {
     console.log('currentAudio.getDuration:', this.state.currentAudio.getDuration());
@@ -130,7 +136,7 @@ export default class Audios extends Component {
           Object.keys(this.state.audios).map((key) => {
             return (
               <View key={key}>
-                <Audio audio={this.state.audios[key]} setAudio={this.setAudio.bind(this)} />
+                <Audio audio={this.state.audios[key]} setAudio={this.setAudio.bind(this)} setProgress={this.setProgress.bind(this)} />
               </View>
             )
           })
