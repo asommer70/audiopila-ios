@@ -107,17 +107,34 @@ export default class Audios extends Component {
     })
   }
 
+  deleteAudio(slug) {
+    console.log('deleteAudio slug:', slug);
+
+    // Remove entry from local storage.
+    store.get(slug)
+      .then((audio) => {
+        if (audio != null) {
+          // Remove file from file system.
+          RNFS.unlink(audio.path)
+
+          store.delete(slug);
+        }
+      })
+
+    // Remove entry from this.state.audios.
+    var audios = this.state.audios;
+    delete audios[slug];
+    this.setState({audios});
+  }
+
   play() {
     this.state.currentAudio.getCurrentTime((seconds, isPlaying) => {
       if (isPlaying == true) {
         this.state.currentAudio.pause();
 
         // Save playbackTime to store.
-        console.log('this.state.currentAudio.slug:', this.state.currentAudio);
-        console.log('this.state.audios:', this.state.audios);
         store.get(this.state.currentAudio.slug)
           .then((audio) => {
-            console.log('audio:', audio);
             if (audio != null) {
               store.update(audio.slug, {playbackTime: seconds});
             }
@@ -135,7 +152,12 @@ export default class Audios extends Component {
           Object.keys(this.state.audios).map((key) => {
             return (
               <View key={key}>
-                <Audio audio={this.state.audios[key]} setAudio={this.setAudio.bind(this)} setProgress={this.setProgress.bind(this)} />
+                <Audio
+                  audio={this.state.audios[key]}
+                  setAudio={this.setAudio.bind(this)}
+                  setProgress={this.setProgress.bind(this)}
+                  deleteAudio={this.deleteAudio.bind(this)}
+                />
               </View>
             )
           })

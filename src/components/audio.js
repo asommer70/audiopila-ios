@@ -36,7 +36,8 @@ export default class Audio extends Component {
       <View key={audio.name}>
         <Text style={styles.instructions}>{audio.name}</Text>
 
-        <Button text={'Play/Pause'} onPress={this.props.setAudio.bind(this, this.props.audio.slug)} slug={this.props.audio.slug} />
+        <Button text={'Play/Pause'} onPress={this.props.setAudio.bind(this, this.props.audio.slug)} />
+        <Button text={'Delete'} onPress={this.props.deleteAudio.bind(this, this.props.audio.slug)} />
 
         <Slider value={this.state.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
       </View>

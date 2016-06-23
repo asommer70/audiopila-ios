@@ -14,7 +14,7 @@ import Button from './components/button';
 export default class Settings extends Component {
   constructor(props) {
     super(props);
-    
+
     console.log('Actions:', Actions);
 
     this.state = {
@@ -33,6 +33,7 @@ export default class Settings extends Component {
       toFile: RNFS.DocumentDirectoryPath + '/' + fileName,
     }).then((res, error) => {
       console.log('res:', res, 'error:', error);
+      Actions.refresh();
       Actions.audios();
     }).catch((error) => {
       console.log('error:', error);
