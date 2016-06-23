@@ -96,10 +96,16 @@ export default class Audios extends Component {
         console.log('error', e);
         this.setState({currentAudio: undefined});
       } else {
-        // console.log('duration', s.getDuration());
-        this.setState({currentAudio: audio, currentAudioName: audioFile.name}, () => {
-          this.play();
-        });
+        store.get(audioFile.slug)
+          .then((audioData) => {
+            console.log('audioData:', audioData);
+            if (audioData) {
+              audio.setCurrentTime(audioData.playbackTime);
+            }
+            this.setState({currentAudio: audio, currentAudioName: audioFile.name}, () => {
+              this.play();
+            });
+          })
       }
     });
   }
@@ -112,7 +118,9 @@ export default class Audios extends Component {
       if (isPlaying == true) {
         this.state.currentAudio.pause();
         this.setState({audioProgress: seconds});
-
+        this.state.currentAudio.getCurrentTime((time) => {
+          store.update(this.state.currentAudio.slug, {playbackTime: time});
+        });
       } else {
         this.state.currentAudio.play();
       }
