@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Slider
+  ListView
 } from 'react-native';
 var RNFS = require('react-native-fs');
 var Sound = require('react-native-sound');
@@ -16,15 +16,16 @@ export default class Audios extends Component {
   constructor(props) {
     super(props);
 
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     this.state = {
       files: [],
       audios: {},
       currentAudio: undefined,
       currentAudioName: '',
+      dataSource: this.ds.cloneWithRows({}),
     }
-  }
 
-  componentDidMount() {
     // this.syncFiles();
     RNFS.readDir(RNFS.DocumentDirectoryPath)
       .then((files) => {
@@ -52,7 +53,7 @@ export default class Audios extends Component {
 
                 audios[file.slug] = file;
 
-                this.setState({audios: audios});
+                this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
                 s.release();
               })
           })
@@ -124,7 +125,7 @@ export default class Audios extends Component {
     // Remove entry from this.state.audios.
     var audios = this.state.audios;
     delete audios[slug];
-    this.setState({audios});
+    this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
   }
 
   play() {
@@ -145,23 +146,29 @@ export default class Audios extends Component {
     })
   }
 
+  _renderRow(rowData, sectionID, rowID) {
+  return (
+      <View style={styles.audio}>
+        <Audio
+          audio={rowData}
+          setAudio={this.setAudio.bind(this)}
+          setProgress={this.setProgress.bind(this)}
+          deleteAudio={this.deleteAudio.bind(this)}
+        />
+      </View>
+  );
+}
+
   render() {
     return (
       <View style={styles.container}>
-        {
-          Object.keys(this.state.audios).map((key) => {
-            return (
-              <View key={key}>
-                <Audio
-                  audio={this.state.audios[key]}
-                  setAudio={this.setAudio.bind(this)}
-                  setProgress={this.setProgress.bind(this)}
-                  deleteAudio={this.deleteAudio.bind(this)}
-                />
-              </View>
-            )
-          })
-        }
+        <ListView
+          style={styles.audioList}
+          dataSource={this.state.dataSource}
+          renderRow={this._renderRow.bind(this)}
+          enableEmptySections={true}
+          renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator}/>}
+        />
       </View>
     );
   }
@@ -170,18 +177,21 @@ export default class Audios extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
 
-  instructions: {
-    textAlign: 'center',
-    color: '#424242',
-    marginBottom: 5,
+  audioList: {
+    marginTop: 60,
+    marginBottom: 40
   },
 
-  progressView: {
-    marginTop: 10,
+  separator: {
+    height: 1,
+    backgroundColor: '#DBDEE3',
   },
+
+  audio: {
+    marginTop: 10,
+    padding: 10
+  }
 });

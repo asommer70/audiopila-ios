@@ -14,19 +14,15 @@ import Button from './components/button';
 export default class Settings extends Component {
   constructor(props) {
     super(props);
-
-    console.log('Actions:', Actions);
-
+    
     this.state = {
       downloadUrl: ''
     }
   }
 
   downloadFile() {
-    console.log('downloadUrl:', this.state.downloadUrl);
     var parts = this.state.downloadUrl.replace(/\s|%20/g, '_').split('/');
     var fileName = parts[parts.length - 1];
-    console.log('fileName:', fileName);
 
     RNFS.downloadFile({
       fromUrl: this.state.downloadUrl,
