@@ -8,6 +8,7 @@ import {
 var RNFS = require('react-native-fs');
 var Sound = require('react-native-sound');
 var store = require('react-native-simple-store');
+import {Actions} from 'react-native-router-flux';
 
 import Button from './components/button';
 import Audio from './components/audio';
@@ -15,6 +16,7 @@ import Audio from './components/audio';
 export default class Audios extends Component {
   constructor(props) {
     super(props);
+    console.log('Audios props:', props);
 
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -26,6 +28,18 @@ export default class Audios extends Component {
       dataSource: this.ds.cloneWithRows({}),
     }
 
+    this.setAudios();
+  }
+
+  dirSync() {
+    this.setState({dirSync: true});
+  }
+
+  componentDidMount() {
+    Actions.refresh();
+  }
+
+  setAudios() {
     // this.syncFiles();
     RNFS.readDir(RNFS.DocumentDirectoryPath)
       .then((files) => {
@@ -109,8 +123,6 @@ export default class Audios extends Component {
   }
 
   deleteAudio(slug) {
-    console.log('deleteAudio slug:', slug);
-
     // Remove entry from local storage.
     store.get(slug)
       .then((audio) => {
@@ -162,6 +174,8 @@ export default class Audios extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Button onPress={Actions.settings} text={'Settings'} />
+
         <ListView
           style={styles.audioList}
           dataSource={this.state.dataSource}
@@ -182,7 +196,6 @@ const styles = StyleSheet.create({
 
   audioList: {
     marginTop: 60,
-    marginBottom: 40
   },
 
   separator: {

@@ -14,7 +14,7 @@ import Button from './components/button';
 export default class Settings extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       downloadUrl: ''
     }
@@ -28,9 +28,7 @@ export default class Settings extends Component {
       fromUrl: this.state.downloadUrl,
       toFile: RNFS.DocumentDirectoryPath + '/' + fileName,
     }).then((res, error) => {
-      console.log('res:', res, 'error:', error);
-      Actions.refresh();
-      Actions.audios();
+      Actions.audios({type: 'reset'});
     }).catch((error) => {
       console.log('error:', error);
     })
