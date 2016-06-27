@@ -4,12 +4,18 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 var RNFS = require('react-native-fs');
+var FileDownload = require('react-native-file-download');
 
 import Button from './components/button';
+
+FileDownload.addListener(URL, (info) => {
+  console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
+});
 
 export default class Settings extends Component {
   constructor(props) {
@@ -23,15 +29,25 @@ export default class Settings extends Component {
   downloadFile() {
     var parts = this.state.downloadUrl.replace(/\s|%20/g, '_').split('/');
     var fileName = parts[parts.length - 1];
+    const headers = {
+      'Accept-Language': 'en-US'
+    }
 
-    RNFS.downloadFile({
-      fromUrl: this.state.downloadUrl,
-      toFile: RNFS.DocumentDirectoryPath + '/' + fileName,
-    }).then((res, error) => {
-      Actions.audios({type: 'reset'});
-    }).catch((error) => {
-      console.log('error:', error);
-    })
+    // Check file extension.
+    var ext = this.state.downloadUrl.substr(this.state.downloadUrl.length - 4);
+    if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
+
+      FileDownload.download(this.state.downloadUrl, RNFS.DocumentDirectoryPath, fileName, headers)
+      .then((response) => {
+        Actions.audios({type: 'reset', download: true});
+      })
+      .catch((error) => {
+        console.log('download error:', error);
+        Alert.alert('File could not be downloaded...');
+      })
+    } else {
+      Alert.alert('Sorry Audio Pila! can only handle mp3, mp4, and m4a files at this time.')
+    }
   }
 
   render() {

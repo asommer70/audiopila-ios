@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView
+  ListView,
+  Alert
 } from 'react-native';
 var RNFS = require('react-native-fs');
 var Sound = require('react-native-sound');
@@ -16,8 +17,6 @@ import Audio from './components/audio';
 export default class Audios extends Component {
   constructor(props) {
     super(props);
-    console.log('Audios props:', props);
-
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
@@ -49,7 +48,13 @@ export default class Audios extends Component {
         files.forEach((file) => {
           var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
             if (e) {
-              console.log('error', e);
+              console.log('error', e, 'file:', file);
+              if (this.props.download == true) {
+                Alert.alert('Failed to download file.');
+              }
+              RNFS.unlink(file.path);
+              s.release();
+              return;
             }
 
             file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
@@ -103,7 +108,7 @@ export default class Audios extends Component {
   setCurrentAudio(audioFile) {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
       if (e) {
-        console.log('error', e);
+        console.log('setCurrentAudio error:', e);
         this.setState({currentAudio: undefined});
       } else {
         audio.slug = audioFile.slug;
@@ -116,7 +121,6 @@ export default class Audios extends Component {
   }
 
   setProgress(value) {
-    console.log('value:', value);
     this.setState({playbackTime: value}, () => {
       this.state.currentAudio.setCurrentTime(value);
     })
@@ -129,8 +133,6 @@ export default class Audios extends Component {
         if (audio != null) {
           // Remove file from file system.
           RNFS.unlink(audio.path)
-
-          store.delete(slug);
         }
       })
 
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
   },
 
   audioList: {
-    marginTop: 60,
+    marginTop: 5,
   },
 
   separator: {
