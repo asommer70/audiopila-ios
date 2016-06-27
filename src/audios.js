@@ -132,14 +132,19 @@ export default class Audios extends Component {
       .then((audio) => {
         if (audio != null) {
           // Remove file from file system.
-          RNFS.unlink(audio.path)
+          Alert.alert('Delete Audio', 'Are you sure you want to delete: ' + audio.name, [
+            {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
+            {text: 'OK', onPress: () => {
+              RNFS.unlink(audio.path);
+
+              // Remove entry from this.state.audios.
+              var audios = this.state.audios;
+              delete audios[slug];
+              this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
+            }}
+          ])
         }
       })
-
-    // Remove entry from this.state.audios.
-    var audios = this.state.audios;
-    delete audios[slug];
-    this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
   }
 
   play() {
