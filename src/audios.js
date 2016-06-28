@@ -12,7 +12,9 @@ var store = require('react-native-simple-store');
 import {Actions} from 'react-native-router-flux';
 
 import Button from './components/button';
+import ImageButton from './components/image_button';
 import Audio from './components/audio';
+import CurrentAudio from './components/current_audio';
 
 export default class Audios extends Component {
   constructor(props) {
@@ -25,6 +27,7 @@ export default class Audios extends Component {
       currentAudio: undefined,
       currentAudioName: '',
       dataSource: this.ds.cloneWithRows({}),
+      playing: false,
     }
 
     this.setAudios();
@@ -67,10 +70,20 @@ export default class Audios extends Component {
 
                 this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
                 s.release();
+                this.getLastPlayed();
               })
           })
         })
       });
+  }
+
+  getLastPlayed() {
+    store.get('lastPlayed')
+      .then((audio) => {
+        if (audio) {
+          this.setCurrentAudio(audio, false);
+        }
+      })
   }
 
   removeStoreFile(files) {
@@ -88,26 +101,31 @@ export default class Audios extends Component {
 
   setAudio(slug) {
     if (this.state.currentAudio == undefined) {
-      this.setCurrentAudio(this.state.audios[slug]);
+      this.setCurrentAudio(this.state.audios[slug], true);
     } else if (this.state.currentAudioName != this.state.audios[slug].name) {
       this.state.currentAudio.stop();
       this.state.currentAudio.release();
-      this.setCurrentAudio(this.state.audios[slug]);
+      this.setCurrentAudio(this.state.audios[slug], true);
     } else {
       this.play();
     }
   }
 
-  setCurrentAudio(audioFile) {
+  setCurrentAudio(audioFile, playNow) {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
+      audio.name = audioFile.name;
+      console.log('audio:', audio);
+
       if (e) {
         console.log('setCurrentAudio error:', e);
         this.setState({currentAudio: undefined});
       } else {
         audio.slug = audioFile.slug;
         audio.setCurrentTime(audioFile.playbackTime);
-        this.setState({currentAudio: audio, currentAudioName: audioFile.name}, () => {
-          this.play();
+        this.setState({currentAudio: audio, currentAudioName: audioFile.name, playing: playNow}, () => {
+          if (playNow) {
+            this.play();
+          }
         });
       }
     });
@@ -146,21 +164,34 @@ export default class Audios extends Component {
   }
 
   play() {
-    this.state.currentAudio.getCurrentTime((seconds, isPlaying) => {
-      if (isPlaying == true) {
-        this.state.currentAudio.pause();
+    if (this.state.currentAudio) {
+      this.state.currentAudio.getCurrentTime((seconds, isPlaying) => {
+        if (isPlaying == true) {
+          this.state.currentAudio.pause();
+          this.setState({playing: false});
 
-        // Save playbackTime to store.
-        store.get(this.state.currentAudio.slug)
-          .then((audio) => {
-            if (audio != null) {
-              store.update(audio.slug, {playbackTime: seconds});
-            }
-          })
-      } else {
-        this.state.currentAudio.play();
-      }
-    })
+          // Save playbackTime to store.
+          store.get(this.state.currentAudio.slug)
+            .then((audio) => {
+              if (audio != null) {
+                store.update(audio.slug, {playbackTime: seconds});
+
+                store.get('lastPlayed')
+                  .then((lastAudio) => {
+                    if (lastAudio) {
+                      store.update('lastPlayed', audio)
+                    } else {
+                      store.save('lastPlayed', audio)
+                    }
+                  })
+              }
+            })
+        } else {
+          this.state.currentAudio.play();
+          this.setState({playing: true});
+        }
+      })
+    }
   }
 
   _renderRow(rowData, sectionID, rowID) {
@@ -179,7 +210,11 @@ export default class Audios extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button onPress={Actions.settings} text={'Settings'} />
+        <CurrentAudio
+          playing={this.state.playing}
+          currentAudio={this.state.currentAudio ? this.state.currentAudio : {name: 'Nothing playing... yet.', disabled: true}}
+          onPress={this.play.bind(this)}
+        />
 
         <ListView
           style={styles.audioList}
@@ -211,5 +246,5 @@ const styles = StyleSheet.create({
   audio: {
     marginTop: 10,
     padding: 10
-  }
+  },
 });

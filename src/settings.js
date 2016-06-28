@@ -72,6 +72,7 @@ export default class Settings extends Component {
     } else {
       progressBar = <View/>;
     }
+    
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
