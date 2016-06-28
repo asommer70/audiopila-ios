@@ -30,14 +30,6 @@ export default class Audios extends Component {
     this.setAudios();
   }
 
-  dirSync() {
-    this.setState({dirSync: true});
-  }
-
-  componentDidMount() {
-    Actions.refresh();
-  }
-
   setAudios() {
     // this.syncFiles();
     RNFS.readDir(RNFS.DocumentDirectoryPath)
@@ -48,7 +40,7 @@ export default class Audios extends Component {
         files.forEach((file) => {
           var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
             if (e) {
-              console.log('error', e, 'file:', file);
+              console.log('setAudios new Sound error:', e, 'file:', file);
               if (this.props.download == true) {
                 Alert.alert('Failed to download file.');
               }
@@ -65,6 +57,7 @@ export default class Audios extends Component {
               .then((audio) => {
                 if (audio != null) {
                   file.playbackTime = audio.playbackTime;
+                  store.update(file.slug, file);
                 } else {
                   file.playbackTime = 0;
                   store.save(file.slug, file);
@@ -135,12 +128,17 @@ export default class Audios extends Component {
           Alert.alert('Delete Audio', 'Are you sure you want to delete: ' + audio.name, [
             {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
             {text: 'OK', onPress: () => {
-              RNFS.unlink(audio.path);
-
-              // Remove entry from this.state.audios.
-              var audios = this.state.audios;
-              delete audios[slug];
-              this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
+              RNFS.unlink(audio.path)
+                .then(() => {
+                  // Remove entry from this.state.audios.
+                  var audios = this.state.audios;
+                  delete audios[slug];
+                  this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
+                })
+                .catch((error) => {
+                  console.log('RNFS.unlink error:', error);
+                  Alert.alert(error.message);
+                });
             }}
           ])
         }
