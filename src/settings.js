@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TextInput,
-  Alert
+  Alert,
+  ProgressViewIOS
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 var RNFS = require('react-native-fs');
@@ -13,16 +14,14 @@ var FileDownload = require('react-native-file-download');
 
 import Button from './components/button';
 
-FileDownload.addListener(URL, (info) => {
-  console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
-});
-
 export default class Settings extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      downloadUrl: ''
+      downloadUrl: '',
+      progress: 0,
+      downloading: false
     }
   }
 
@@ -37,6 +36,11 @@ export default class Settings extends Component {
     var ext = this.state.downloadUrl.substr(this.state.downloadUrl.length - 4);
     if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
 
+      FileDownload.addListener(this.state.downloadUrl, (info) => {
+        console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
+        this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
+      });
+
       FileDownload.download(this.state.downloadUrl, RNFS.DocumentDirectoryPath, fileName, headers)
       .then((response) => {
         Actions.audios({type: 'reset', download: true});
@@ -50,7 +54,24 @@ export default class Settings extends Component {
     }
   }
 
+  updateProgress(progress) {
+    // var progress = this.state.progress + 0.01;
+    this.setState({ progress });
+    // this.requestAnimationFrame(() => this.updateProgress());
+  }
+
+  getProgress(offset) {
+    var progress = this.state.progress + offset;
+    return Math.sin(progress % Math.PI) % 1;
+  }
+
   render() {
+    var progressBar;
+    if (this.state.downloading) {
+      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)}/>;
+    } else {
+      progressBar = <View/>;
+    }
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
@@ -60,6 +81,7 @@ export default class Settings extends Component {
               <Text style={styles.label}>Download Audio File From URL:</Text>
               <TextInput
                 style={styles.input}
+                onFocus={() => this.setState({downloading: true})}
                 onChangeText={ (text) => this.setState({ downloadUrl: text }) }
                 value={this.state.downloadUrl}
               />
@@ -71,6 +93,8 @@ export default class Settings extends Component {
               onPress={this.downloadFile.bind(this)}
               textStyle={styles.downloadText}
               buttonStyle={styles.downloadButton} />
+
+            {progressBar}
           </View>
         </View>
       </View>
@@ -116,5 +140,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
+  progressView: {
+    marginTop: 10,
+  }
 
 });
