@@ -114,8 +114,6 @@ export default class Audios extends Component {
   setCurrentAudio(audioFile, playNow) {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
       audio.name = audioFile.name;
-      console.log('audio:', audio);
-
       if (e) {
         console.log('setCurrentAudio error:', e);
         this.setState({currentAudio: undefined});

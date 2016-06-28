@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 var store = require('react-native-simple-store');
 
-import Button from './button';
+import ImageButton from './image_button';
 
 export default class Audio extends Component {
   constructor(props) {
@@ -16,6 +16,7 @@ export default class Audio extends Component {
     this.state = {
       currentAudio: undefined,
       playbackTime: this.props.audio.playbackTime,
+      playing: false
     }
   }
 
@@ -24,7 +25,6 @@ export default class Audio extends Component {
   }
 
   setProgress(value) {
-    console.log('value:', value);
     this.setState({playbackTime: value}, () => {
       this.state.currentAudio.setCurrentTime(value);
     })
@@ -32,12 +32,30 @@ export default class Audio extends Component {
 
   render() {
     var audio = this.props.audio;
+
     return (
       <View key={audio.name}>
-        <Text style={styles.instructions}>{audio.name}</Text>
+        <Text style={styles.name}>{audio.name}</Text>
 
-        <Button text={'Play/Pause'} onPress={this.props.setAudio.bind(this, this.props.audio.slug)} />
-        <Button text={'Delete'} onPress={this.props.deleteAudio.bind(this, this.props.audio.slug)} />
+        <View style={styles.row}>
+          <ImageButton
+            imageSrc={require('../img/play-icon.png')}
+            buttonStyle={styles.actionButton}
+            onPress={this.props.setAudio.bind(this, this.props.audio.slug)}
+          />
+
+          <ImageButton
+            imageSrc={require('../img/pause-icon.png')}
+            buttonStyle={styles.actionButton}
+            onPress={this.props.setAudio.bind(this, this.props.audio.slug)}
+          />
+
+          <ImageButton
+            imageSrc={require('../img/delete-icon.png')}
+            buttonStyle={styles.deleteButton}
+            onPress={this.props.deleteAudio.bind(this, this.props.audio.slug)}
+          />
+        </View>
 
         <Slider value={this.state.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
       </View>
@@ -53,19 +71,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
-  instructions: {
+  name: {
     textAlign: 'center',
     color: '#424242',
     marginBottom: 5,
+    fontSize: 18
   },
 
   progressView: {
     marginTop: 10,
   },
+
+  actionButton: {
+    width: 40,
+    paddingLeft: 25,
+    paddingRight: 25,
+    marginRight: 10
+  },
+
+  deleteButton: {
+    width: 40,
+    height: 40,
+    marginLeft: 50
+  }
 });
