@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 var RNFS = require('react-native-fs');
+var store = require('react-native-simple-store');
 var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 
@@ -71,26 +72,39 @@ export default class Settings extends Component {
   }
 
   syncToUrl() {
-    fetch(this.state.httpSyncUrl, {
-    	method: 'post',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-    	body: JSON.stringify({
-        from: 'ios',
-        status: 'golden'
-    	})
-    });
+    this.getSyncData((data) => {
+      console.log('data:', data);
+
+      fetch(this.state.httpSyncUrl, {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    })
   }
 
   getSyncData(callback) {
     var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
     var data = {
-      deviceName: deviceName,
+      name: deviceName,
     }
 
-    
+    store.get('audios')
+      .then((audios) => {
+        if (audios) {
+          data.audios = audios;
+          store.get('lastPlayed')
+            .then((lastAudio) => {
+              data.lastPlayed = lastAudio;
+              data.lastSynced = Date.now();
+
+              callback(data);
+            })
+        }
+      })
   }
 
   render() {

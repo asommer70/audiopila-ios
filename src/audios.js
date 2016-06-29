@@ -66,18 +66,19 @@ export default class Audios extends Component {
 
                 if (audio != null || audio != undefined) {
                   file.playbackTime = audio.playbackTime;
-                  // store.update(file.slug, file);
                 } else {
                   file.playbackTime = 0;
-                  // store.save(file.slug, file);
                 }
 
-                audios[file.slug] = file;
-                store.update('audios', audios);
+                file.repository = {name: 'root', path: '/'};
+                if (!audio.deleted) {
+                  audios[file.slug] = file;
+                  store.update('audios', audios);
+                  this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
+                }
 
-                this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
-                s.release();
                 this.getLastPlayed();
+                s.release();
               })
             })
           });
@@ -157,6 +158,11 @@ export default class Audios extends Component {
                 .then(() => {
                   // Remove entry from this.state.audios.
                   delete audios[slug];
+
+                  // Mark the Audio as being deleted.
+                  audios[slug].deleted = true;
+                  store.update('audios', audios);
+
                   this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
                 })
                 .catch((error) => {
