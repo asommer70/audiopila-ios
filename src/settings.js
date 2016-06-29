@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -88,7 +87,7 @@ export default class Settings extends Component {
       .then((data) => {
         if (data) {
           console.log('returned data:', data);
-          this.savePila(data.pila);
+          this.savePila(data);
           Alert.alert(data.message);
         }
       })
@@ -121,13 +120,14 @@ export default class Settings extends Component {
       })
   }
 
-  savePila(pila) {
+  savePila(data) {
     store.get('pilas')
       .then((pilas) => {
         if (!pilas) {
-          store.save('pilas', pilas);
+          store.save('pilas', data.pilas);
+          store.save('pila', data.pila);
         } else {
-          pilas[pila] = pila;
+          pilas[data.pila] = data.pila;
           store.update('pilas', pilas);
         }
         this.setState({httpSyncUrl: ''});

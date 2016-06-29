@@ -3,6 +3,7 @@ import { Router, Scene, TabBar, Actions } from 'react-native-router-flux';
 
 import Settings from './settings';
 import Audios from './audios';
+import Pilas from './pilas';
 import TabIcon from './components/tabicon';
 
 export default class Main extends Component {
@@ -23,8 +24,35 @@ export default class Main extends Component {
     return (
       <Router>
         <Scene key="root">
-            <Scene key="audios" onRight={() => Actions.settings()} rightTitle={"Settings"} component={Audios} title="Audios" initial={true} icon={TabIcon} navigationBarStyle={{backgroundColor:'green'}} titleStyle={{color:'white'}} />
-            <Scene key="settings" component={Settings} title="Settings" icon={TabIcon} navigationBarStyle={{backgroundColor:'silver'}} titleStyle={{color:'white'}} />
+            <Scene
+              key="audios"
+              onRight={() => Actions.settings()}
+              rightTitle={"Settings"}
+              onLeft={() => Actions.pilas()}
+              leftTitle={"Pilas"}
+              component={Audios}
+              title="Audios"
+              initial={true}
+              icon={TabIcon}
+              navigationBarStyle={{backgroundColor:'green'}}
+              titleStyle={{color:'white'}}
+            />
+            <Scene
+              key="settings"
+              component={Settings}
+              title="Settings"
+              icon={TabIcon}
+              navigationBarStyle={{backgroundColor:'silver'}}
+              titleStyle={{color:'white'}}
+            />
+            <Scene
+              key="pilas"
+              component={Pilas}
+              title="Pilas"
+              icon={TabIcon}
+              navigationBarStyle={{backgroundColor:'#424242'}}
+              titleStyle={{color:'white'}}
+            />
         </Scene>
       </Router>
     )

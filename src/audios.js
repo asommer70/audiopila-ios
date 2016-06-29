@@ -209,17 +209,17 @@ export default class Audios extends Component {
   }
 
   _renderRow(rowData, sectionID, rowID) {
-  return (
-      <View style={styles.audio}>
-        <Audio
-          audio={rowData}
-          setAudio={this.setAudio.bind(this)}
-          setProgress={this.setProgress.bind(this)}
-          deleteAudio={this.deleteAudio.bind(this)}
-        />
-      </View>
-  );
-}
+    return (
+        <View style={styles.audio}>
+          <Audio
+            audio={rowData}
+            setAudio={this.setAudio.bind(this)}
+            setProgress={this.setProgress.bind(this)}
+            deleteAudio={this.deleteAudio.bind(this)}
+          />
+        </View>
+    );
+  }
 
   render() {
     return (
