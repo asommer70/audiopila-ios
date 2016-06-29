@@ -6,11 +6,13 @@ import {
   View,
   TextInput,
   Alert,
-  ProgressViewIOS
+  ProgressViewIOS,
+  Platform
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 var RNFS = require('react-native-fs');
 var FileDownload = require('react-native-file-download');
+var DeviceInfo = require('react-native-device-info');
 
 import Button from './components/button';
 
@@ -18,8 +20,13 @@ export default class Settings extends Component {
   constructor(props) {
     super(props);
 
+    console.log('Platform:', Platform);
+    var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+    console.log('deviceName:', deviceName);
+
     this.state = {
       downloadUrl: '',
+      httpSyncUrl: '',
       progress: 0,
       downloading: false
     }
@@ -55,14 +62,35 @@ export default class Settings extends Component {
   }
 
   updateProgress(progress) {
-    // var progress = this.state.progress + 0.01;
     this.setState({ progress });
-    // this.requestAnimationFrame(() => this.updateProgress());
   }
 
   getProgress(offset) {
     var progress = this.state.progress + offset;
     return Math.sin(progress % Math.PI) % 1;
+  }
+
+  syncToUrl() {
+    fetch(this.state.httpSyncUrl, {
+    	method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+    	body: JSON.stringify({
+        from: 'ios',
+        status: 'golden'
+    	})
+    });
+  }
+
+  getSyncData(callback) {
+    var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+    var data = {
+      deviceName: deviceName,
+    }
+
+    
   }
 
   render() {
@@ -72,7 +100,7 @@ export default class Settings extends Component {
     } else {
       progressBar = <View/>;
     }
-    
+
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
@@ -92,6 +120,29 @@ export default class Settings extends Component {
               style={styles.downloadButton}
               text={'Download File'}
               onPress={this.downloadFile.bind(this)}
+              textStyle={styles.downloadText}
+              buttonStyle={styles.downloadButton} />
+
+            {progressBar}
+          </View>
+        </View>
+
+        <View style={styles.wrapper}>
+          <View style={styles.formWrapper}>
+
+            <View style={styles.formElement}>
+              <Text style={styles.label}>Enter URL for HTTP Sync:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={ (text) => this.setState({ httpSyncUrl: text }) }
+                value={this.state.httpSyncUrl}
+              />
+            </View>
+
+            <Button
+              style={styles.downloadButton}
+              text={'Save Sync Device'}
+              onPress={this.syncToUrl.bind(this)}
               textStyle={styles.downloadText}
               buttonStyle={styles.downloadButton} />
 

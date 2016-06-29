@@ -35,46 +35,53 @@ export default class Audios extends Component {
 
   setAudios() {
     // this.syncFiles();
-    RNFS.readDir(RNFS.DocumentDirectoryPath)
-      .then((files) => {
-        files = this.removeStoreFile(files);
+    store.get('audios')
+      .then((audios) => {
+        if (!audios) {
+          audios = {};
+        }
 
-        var audios = this.state.audios;
-        files.forEach((file) => {
-          var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
-            if (e) {
-              console.log('setAudios new Sound error:', e, 'file:', file);
-              if (this.props.download == true) {
-                Alert.alert('Failed to download file.');
-              }
-              RNFS.unlink(file.path);
-              s.release();
-              return;
-            }
+        RNFS.readDir(RNFS.DocumentDirectoryPath)
+          .then((files) => {
+            files = this.removeStoreFile(files);
 
-            file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
-            file.duration = s.getDuration();
+            // var audios = this.state.audios;
+            files.forEach((file) => {
+              var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
+                if (e) {
+                  console.log('setAudios new Sound error:', e, 'file:', file);
+                  if (this.props.download == true) {
+                    Alert.alert('Failed to download file.');
+                  }
+                  RNFS.unlink(file.path);
+                  s.release();
+                  return;
+                }
 
-            // Get the playbackTime.
-            store.get(file.slug)
-              .then((audio) => {
-                if (audio != null) {
+                file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
+                file.duration = s.getDuration();
+
+                // Get the playbackTime.
+                var audio = audios[file.slug];
+
+                if (audio != null || audio != undefined) {
                   file.playbackTime = audio.playbackTime;
-                  store.update(file.slug, file);
+                  // store.update(file.slug, file);
                 } else {
                   file.playbackTime = 0;
-                  store.save(file.slug, file);
+                  // store.save(file.slug, file);
                 }
 
                 audios[file.slug] = file;
+                store.update('audios', audios);
 
                 this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
                 s.release();
                 this.getLastPlayed();
               })
-          })
-        })
-      });
+            })
+          });
+      })
   }
 
   getLastPlayed() {
@@ -137,9 +144,11 @@ export default class Audios extends Component {
 
   deleteAudio(slug) {
     // Remove entry from local storage.
-    store.get(slug)
-      .then((audio) => {
-        if (audio != null) {
+    store.get('audios')
+      .then((audios) => {
+        if (audios != null) {
+          var audio = aduios[slug];
+
           // Remove file from file system.
           Alert.alert('Delete Audio', 'Are you sure you want to delete: ' + audio.name, [
             {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
@@ -147,7 +156,6 @@ export default class Audios extends Component {
               RNFS.unlink(audio.path)
                 .then(() => {
                   // Remove entry from this.state.audios.
-                  var audios = this.state.audios;
                   delete audios[slug];
                   this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
                 })
@@ -169,10 +177,12 @@ export default class Audios extends Component {
           this.setState({playing: false});
 
           // Save playbackTime to store.
-          store.get(this.state.currentAudio.slug)
-            .then((audio) => {
-              if (audio != null) {
-                store.update(audio.slug, {playbackTime: seconds});
+          store.get('audios')
+            .then((audios) => {
+              if (audios != null) {
+                var audio = audios[this.state.currentAudio.slug];
+                audios[this.state.currentAudio.slug].playbackTime = seconds;
+                store.update('audios', audios);
 
                 store.get('lastPlayed')
                   .then((lastAudio) => {

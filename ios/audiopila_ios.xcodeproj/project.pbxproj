@@ -25,6 +25,7 @@
 		668933FB1D1988AF00ACEDAE /* libRNAudioPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668933F81D1988A900ACEDAE /* libRNAudioPlayer.a */; };
 		668934021D1989C800ACEDAE /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668934011D1989C300ACEDAE /* libRNFS.a */; };
 		668934091D21AE5F00ACEDAE /* libRNFileDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668934081D21AE5000ACEDAE /* libRNFileDownload.a */; };
+		668934101D23E14000ACEDAE /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6689340F1D23E13900ACEDAE /* libRNDeviceInfo.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -127,6 +128,13 @@
 			remoteGlobalIDString = D045FC4C1B94140B00C00AF7;
 			remoteInfo = RNFileDownload;
 		};
+		6689340E1D23E13900ACEDAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6689340A1D23E13800ACEDAE /* RNDeviceInfo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DA5891D81BA9A9FC002B4DB2;
+			remoteInfo = RNDeviceInfo;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -167,6 +175,7 @@
 		668933F21D1988A900ACEDAE /* RNAudioPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAudioPlayer.xcodeproj; path = "../node_modules/react-native-audioplayer/RNAudioPlayer.xcodeproj"; sourceTree = "<group>"; };
 		668933FC1D1989C200ACEDAE /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		668934031D21AE4F00ACEDAE /* RNFileDownload.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFileDownload.xcodeproj; path = "../node_modules/react-native-file-download/RNFileDownload.xcodeproj"; sourceTree = "<group>"; };
+		6689340A1D23E13800ACEDAE /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,6 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				668934101D23E14000ACEDAE /* libRNDeviceInfo.a in Frameworks */,
 				668934091D21AE5F00ACEDAE /* libRNFileDownload.a in Frameworks */,
 				668934021D1989C800ACEDAE /* libRNFS.a in Frameworks */,
 				668933FB1D1988AF00ACEDAE /* libRNAudioPlayer.a in Frameworks */,
@@ -331,6 +341,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6689340B1D23E13800ACEDAE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6689340F1D23E13900ACEDAE /* libRNDeviceInfo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,6 +360,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				6689340A1D23E13800ACEDAE /* RNDeviceInfo.xcodeproj */,
 				668934031D21AE4F00ACEDAE /* RNFileDownload.xcodeproj */,
 				668933FC1D1989C200ACEDAE /* RNFS.xcodeproj */,
 				668933F21D1988A900ACEDAE /* RNAudioPlayer.xcodeproj */,
@@ -500,6 +519,10 @@
 					ProjectRef = 668933F21D1988A900ACEDAE /* RNAudioPlayer.xcodeproj */;
 				},
 				{
+					ProductGroup = 6689340B1D23E13800ACEDAE /* Products */;
+					ProjectRef = 6689340A1D23E13800ACEDAE /* RNDeviceInfo.xcodeproj */;
+				},
+				{
 					ProductGroup = 668934041D21AE4F00ACEDAE /* Products */;
 					ProjectRef = 668934031D21AE4F00ACEDAE /* RNFileDownload.xcodeproj */;
 				},
@@ -610,6 +633,13 @@
 			fileType = archive.ar;
 			path = libRNFileDownload.a;
 			remoteRef = 668934071D21AE5000ACEDAE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6689340F1D23E13900ACEDAE /* libRNDeviceInfo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNDeviceInfo.a;
+			remoteRef = 6689340E1D23E13900ACEDAE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
