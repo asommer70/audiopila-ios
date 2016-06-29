@@ -21,10 +21,6 @@ export default class Settings extends Component {
   constructor(props) {
     super(props);
 
-    console.log('Platform:', Platform);
-    var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
-    console.log('deviceName:', deviceName);
-
     this.state = {
       downloadUrl: '',
       httpSyncUrl: '',
@@ -58,7 +54,7 @@ export default class Settings extends Component {
         Alert.alert('File could not be downloaded...');
       })
     } else {
-      Alert.alert('Sorry Audio Pila! can only handle mp3, mp4, and m4a files at this time.')
+      Alert.alert('Sorry this device can only handle mp3, mp4, and m4a files at this time.')
     }
   }
 
@@ -73,8 +69,6 @@ export default class Settings extends Component {
 
   syncToUrl() {
     this.getSyncData((data) => {
-      console.log('data:', data);
-
       fetch(this.state.httpSyncUrl, {
         method: 'post',
         headers: {
@@ -82,6 +76,24 @@ export default class Settings extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
+      })
+      .then((response) => {
+        console.log('response.status:', response.status);
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          Alert.alert(`There was a problem syncing to that URL status code is: ${response.status}`)
+        }
+      })
+      .then((data) => {
+        if (data) {
+          console.log('returned data:', data);
+          this.savePila(data.pila);
+          Alert.alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.log('syncToUrl error:', error);
       });
     })
   }
@@ -90,6 +102,7 @@ export default class Settings extends Component {
     var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
     var data = {
       name: deviceName,
+      platform: Platform.OS
     }
 
     store.get('audios')
@@ -100,10 +113,24 @@ export default class Settings extends Component {
             .then((lastAudio) => {
               data.lastPlayed = lastAudio;
               data.lastSynced = Date.now();
+              data.syncedTo = this.state.syncToUrl;
 
               callback(data);
             })
         }
+      })
+  }
+
+  savePila(pila) {
+    store.get('pilas')
+      .then((pilas) => {
+        if (!pilas) {
+          store.save('pilas', pilas);
+        } else {
+          pilas[pila] = pila;
+          store.update('pilas', pilas);
+        }
+        this.setState({httpSyncUrl: ''});
       })
   }
 
@@ -145,7 +172,7 @@ export default class Settings extends Component {
           <View style={styles.formWrapper}>
 
             <View style={styles.formElement}>
-              <Text style={styles.label}>Enter URL for HTTP Sync:</Text>
+              <Text style={styles.label}>Enter Pila URL for HTTP Sync:</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={ (text) => this.setState({ httpSyncUrl: text }) }
@@ -155,7 +182,7 @@ export default class Settings extends Component {
 
             <Button
               style={styles.downloadButton}
-              text={'Save Sync Device'}
+              text={'Sync To Pila'}
               onPress={this.syncToUrl.bind(this)}
               textStyle={styles.downloadText}
               buttonStyle={styles.downloadButton} />
