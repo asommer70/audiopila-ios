@@ -15,6 +15,7 @@ var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 
 import Button from './components/button';
+import PilaApi from './lib/pila_api';
 
 export default class Settings extends Component {
   constructor(props) {
@@ -67,71 +68,18 @@ export default class Settings extends Component {
   }
 
   syncToUrl() {
-    this.getSyncData((data) => {
-      fetch(this.state.httpSyncUrl, {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then((response) => {
-        console.log('response.status:', response.status);
-        if (response.status == 200) {
-          return response.json();
+    PilaApi.syncToUrl(this.state.httpSyncUrl, (error, data) => {
+      if (error) {
+        if (error.message.status) {
+          Alert.alert(`There was a problem syncing to that URL status code is: ${error.message.status}`)
         } else {
-          Alert.alert(`There was a problem syncing to that URL status code is: ${response.status}`)
+          Alert.alert(error.message);
         }
-      })
-      .then((data) => {
-        if (data) {
-          console.log('returned data:', data);
-          this.savePila(data);
-          Alert.alert(data.message);
-        }
-      })
-      .catch((error) => {
-        console.log('syncToUrl error:', error);
-      });
-    })
-  }
-
-  getSyncData(callback) {
-    var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
-    var data = {
-      name: deviceName,
-      platform: Platform.OS
-    }
-
-    store.get('audios')
-      .then((audios) => {
-        if (audios) {
-          data.audios = audios;
-          store.get('lastPlayed')
-            .then((lastAudio) => {
-              data.lastPlayed = lastAudio;
-              data.lastSynced = Date.now();
-              data.syncedTo = this.state.syncToUrl;
-
-              callback(data);
-            })
-        }
-      })
-  }
-
-  savePila(data) {
-    store.get('pilas')
-      .then((pilas) => {
-        if (!pilas) {
-          store.save('pilas', data.pilas);
-          store.save('pila', data.pila);
-        } else {
-          pilas[data.pila] = data.pila;
-          store.update('pilas', pilas);
-        }
+      } else {
         this.setState({httpSyncUrl: ''});
-      })
+        Alert.alert(data.message);
+      }
+    })
   }
 
   render() {
