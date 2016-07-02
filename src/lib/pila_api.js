@@ -40,7 +40,8 @@ export default class PilaApi {
     var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
     var data = {
       name: deviceName,
-      platform: Platform.OS
+      platform: Platform.OS,
+      type: 'pila'
     }
 
     store.get('audios')

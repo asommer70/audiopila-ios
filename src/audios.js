@@ -58,7 +58,7 @@ export default class Audios extends Component {
                   return;
                 }
 
-                file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').toLowerCase();
+                file.slug = file.name.slice(0, file.name.length - 4).replace(/\s/g, '_').replace(/\./g, '_').toLowerCase();
                 file.duration = s.getDuration();
 
                 // Get the playbackTime.
@@ -89,6 +89,7 @@ export default class Audios extends Component {
     store.get('lastPlayed')
       .then((audio) => {
         if (audio) {
+          console.log('audio:', audio);
           this.setCurrentAudio(audio, false);
         }
       })

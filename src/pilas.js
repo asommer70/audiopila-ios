@@ -49,6 +49,7 @@ export default class Settings extends Component {
   }
 
   sync(name) {
+    console.log('this.state.pila.name:', this.state.pila.name);
     var pila = this.state.pilas[name];
 
     PilaApi.syncToUrl(pila.httpUrl, (error, data) => {
@@ -63,8 +64,8 @@ export default class Settings extends Component {
         Alert.alert(data.message);
       }
     })
-    // store.delete('pilas');
-    // store.delete('pila');
+    store.delete('pilas');
+    store.delete('pila');
   }
 
   _renderRow(rowData, sectionID, rowID) {
