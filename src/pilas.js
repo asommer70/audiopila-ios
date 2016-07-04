@@ -17,7 +17,7 @@ import Button from './components/button';
 import ImageButton from './components/image_button';
 import PilaApi from './lib/pila_api';
 
-export default class Settings extends Component {
+export default class Pilas extends Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -49,7 +49,6 @@ export default class Settings extends Component {
   }
 
   sync(name) {
-    console.log('this.state.pila.name:', this.state.pila.name);
     var pila = this.state.pilas[name];
 
     PilaApi.syncToUrl(pila.httpUrl, (error, data) => {
@@ -64,8 +63,13 @@ export default class Settings extends Component {
         Alert.alert(data.message);
       }
     })
-    store.delete('pilas');
-    store.delete('pila');
+    // store.delete('pilas');
+    // store.delete('pila');
+  }
+
+  pilaAudios(name) {
+    console.log('name:', name, 'pilaAudios...', 'this.state.pilas[name]:', this.state.pilas[name]);
+    Actions.pilaAudios({audios: this.state.pilas[name].audios, title: 'Pila ' + name + ' Audios'})
   }
 
   _renderRow(rowData, sectionID, rowID) {
@@ -76,11 +80,19 @@ export default class Settings extends Component {
           <Text style={styles.label}>Last Synced:</Text>
           <Text>{moment(rowData.lastSynced).fromNow()}</Text>
 
-          <ImageButton
-            imageSrc={require('./img/sync-icon.png')}
-            buttonStyle={styles.actionButton}
-            onPress={this.sync.bind(this, rowData.name)}
-          />
+          <View style={styles.row}>
+            <ImageButton
+              imageSrc={require('./img/sync-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sync.bind(this, rowData.name)}
+            />
+
+            <ImageButton
+              imageSrc={require('./img/music-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.pilaAudios.bind(this, rowData.name)}
+            />
+          </View>
         </View>
     );
   }
@@ -95,11 +107,19 @@ export default class Settings extends Component {
           <Text style={styles.label}>When:</Text>
           <Text>{moment(this.state.pila.lastSynced).fromNow()}</Text>
 
-          <ImageButton
-            imageSrc={require('./img/sync-icon.png')}
-            buttonStyle={styles.actionButton}
-            onPress={this.sync.bind(this, this.state.pila.name)}
-          />
+          <View style={styles.row}>
+            <ImageButton
+              imageSrc={require('./img/sync-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sync.bind(this, this.state.pila.name)}
+            />
+
+            <ImageButton
+              imageSrc={require('./img/music-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.pilaAudios.bind(this, this.state.pila.name)}
+            />
+          </View>
         </View>
       )
     } else {
@@ -133,6 +153,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60
+  },
+
+  row: {
+    flexDirection: 'row'
   },
 
   wrapper: {

@@ -4,6 +4,7 @@ import { Router, Scene, TabBar, Actions } from 'react-native-router-flux';
 import Settings from './settings';
 import Audios from './audios';
 import Pilas from './pilas';
+import PilaAudios from './pila_audios';
 import TabIcon from './components/tabicon';
 
 export default class Main extends Component {
@@ -52,6 +53,14 @@ export default class Main extends Component {
               icon={TabIcon}
               navigationBarStyle={{backgroundColor:'#424242'}}
               titleStyle={{color:'white'}}
+            />
+            <Scene
+              key="pilaAudios"
+              component={PilaAudios}
+              title="Pila Audios"
+              icon={TabIcon}
+              navigationBarStyle={{backgroundColor:'orange'}}
+              titleStyle={{color:'red'}}
             />
         </Scene>
       </Router>
