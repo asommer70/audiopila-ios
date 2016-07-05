@@ -7,9 +7,7 @@ import {
   ListView
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-// var RNFS = require('react-native-fs');
 var store = require('react-native-simple-store');
-var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 var moment = require('moment');
 

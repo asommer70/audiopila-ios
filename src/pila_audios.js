@@ -4,10 +4,11 @@ import {
   Text,
   View,
   Alert,
-  ListView
+  ListView,
+  ProgressViewIOS
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-var FileDownload = require('react-native-file-download');
+// var FileDownload = require('react-native-file-download');
 var RNFS = require('react-native-fs');
 var store = require('react-native-simple-store');
 var DeviceInfo = require('react-native-device-info');
@@ -20,44 +21,53 @@ import PilaApi from './lib/pila_api';
 export default class PilaAudios extends Component {
   constructor(props) {
     super(props);
-    console.log('pilaAudios props:', props);
-
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       dataSource: this.ds.cloneWithRows(this.props.audios),
+      downloading: false,
+      progress: 0
     }
   }
 
   download(slug) {
-    console.log('downloading:', slug);
     var audio = this.props.audios[slug];
-    console.log('audio.httpUrl:', audio.httpUrl, 'audio.name:', audio.name);
+    this.setState({downloading: true}, () => {
+      const headers = {
+        'Accept-Language': 'en-US'
+      }
 
-    const headers = {
-      'Accept-Language': 'en-US'
-    }
+      // Check file extension.
+      var ext = audio.name.substr(audio.name.length - 4);
+      if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
+        // this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
 
-    // Check file extension.
-    var ext = audio.name.substr(audio.name.length - 4);
-    if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
+        RNFS.downloadFile({
+          fromUrl: audio.httpUrl,
+          toFile: RNFS.DocumentDirectoryPath + '/' + audio.name,
+          progressDivider: 0,
+          progress: (res) => {this.updateProgress(res.bytesWritten / res.contentLength)}
+        })
+        .then((response) => {
+          Actions.audios({type: 'reset', download: true});
+        })
+        .catch((error) => {
+          console.log('download error:', error);
+          Alert.alert('File could not be downloaded...');
+        })
+      } else {
+        Alert.alert('Sorry this device can only handle mp3, mp4, and m4a files at this time.')
+      }
+    })
+  }
 
-      // FileDownload.addListener(audio.httpUrl, (info) => {
-      //   console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
-      //   this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
-      // });
+  updateProgress(progress) {
+    this.setState({ progress });
+  }
 
-      FileDownload.download(audio.downloadUrl, RNFS.DocumentDirectoryPath, audio.name, headers)
-      .then((response) => {
-        Actions.audios({type: 'reset', download: true});
-      })
-      .catch((error) => {
-        console.log('download error:', error);
-        Alert.alert('File could not be downloaded...');
-      })
-    } else {
-      Alert.alert('Sorry this device can only handle mp3, mp4, and m4a files at this time.')
-    }
+  getProgress(offset) {
+    var progress = this.state.progress + offset;
+    return Math.sin(progress % Math.PI) % 1;
   }
 
   _renderRow(rowData, sectionID, rowID) {
@@ -72,19 +82,28 @@ export default class PilaAudios extends Component {
           <Text style={styles.label}>Path:</Text>
           <Text>{rowData.path}</Text>
 
-            <ImageButton
-              imageSrc={require('./img/download-icon.png')}
-              buttonStyle={styles.actionButton}
-              onPress={this.download.bind(this, rowData.slug)}
-            />
+          <ImageButton
+            imageSrc={require('./img/download-icon.png')}
+            buttonStyle={styles.actionButton}
+            onPress={this.download.bind(this, rowData.slug)}
+          />
+
         </View>
     );
   }
 
   render() {
+    var progressBar;
+    if (this.state.downloading) {
+      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)}/>;
+    } else {
+      progressBar = <View/>;
+    }
+
     return(
       <View style={styles.container}>
         <View style={styles.wrapper}>
+          {progressBar}
           <ListView
             style={styles.pilas}
             dataSource={this.state.dataSource}
@@ -156,4 +175,8 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     marginRight: 10
   },
+
+  progressView: {
+    marginTop: 10,
+  }
 });
