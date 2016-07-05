@@ -8,7 +8,6 @@ import {
   ProgressViewIOS
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-// var FileDownload = require('react-native-file-download');
 var RNFS = require('react-native-fs');
 var store = require('react-native-simple-store');
 var DeviceInfo = require('react-native-device-info');

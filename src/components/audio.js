@@ -51,6 +51,12 @@ export default class Audio extends Component {
           />
 
           <ImageButton
+            imageSrc={require('../img/upload-icon.png')}
+            buttonStyle={styles.actionButton}
+            onPress={this.props.choosePila.bind(this, this.props.audio.slug)}
+          />
+
+          <ImageButton
             imageSrc={require('../img/delete-icon.png')}
             buttonStyle={styles.deleteButton}
             onPress={this.props.deleteAudio.bind(this, this.props.audio.slug)}

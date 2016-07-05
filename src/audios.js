@@ -222,6 +222,11 @@ export default class Audios extends Component {
     }
   }
 
+  choosePila(slug) {
+    console.log('choosePila slug:', slug);
+    Actions.pilasModal({title: 'Upload To', audio: this.state.audios[slug]});
+  }
+
   _renderRow(rowData, sectionID, rowID) {
     return (
         <View style={styles.audio}>
@@ -230,6 +235,7 @@ export default class Audios extends Component {
             setAudio={this.setAudio.bind(this)}
             setProgress={this.setProgress.bind(this)}
             deleteAudio={this.deleteAudio.bind(this)}
+            choosePila={this.choosePila.bind(this)}
           />
         </View>
     );

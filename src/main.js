@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Router, Scene, TabBar, Actions } from 'react-native-router-flux';
+import { Router, Scene, TabBar, Modal, Actions } from 'react-native-router-flux';
 
 import Settings from './settings';
 import Audios from './audios';
 import Pilas from './pilas';
 import PilaAudios from './pila_audios';
+import PilasModal from './pilas_modal';
 import TabIcon from './components/tabicon';
 
 export default class Main extends Component {
@@ -62,6 +63,7 @@ export default class Main extends Component {
               navigationBarStyle={{backgroundColor:'orange'}}
               titleStyle={{color:'red'}}
             />
+            <Scene key="pilasModal" component={PilasModal} />
         </Scene>
       </Router>
     )
