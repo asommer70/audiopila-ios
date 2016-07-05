@@ -134,8 +134,6 @@ export default class Settings extends Component {
               onPress={this.syncToUrl.bind(this)}
               textStyle={styles.downloadText}
               buttonStyle={styles.downloadButton} />
-
-            {progressBar}
           </View>
         </View>
       </View>

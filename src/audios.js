@@ -45,7 +45,7 @@ export default class Audios extends Component {
           .then((files) => {
             files = this.removeStoreFile(files);
 
-            // var audios = this.state.audios;
+            // var audios = this.state.audios.
             files.forEach((file) => {
               var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
                 if (e) {
@@ -71,11 +71,15 @@ export default class Audios extends Component {
                 }
 
                 file.repository = {name: 'root', path: '/'};
-                if (!audio.deleted) {
-                  audios[file.slug] = file;
-                  store.update('audios', audios);
-                  this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
+                for (var key in audios) {
+                  if (audios[key].deleted) {
+                    delete audios[key];
+                  }
                 }
+
+                audios[file.slug] = file;
+                store.update('audios', audios);
+                this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
 
                 this.getLastPlayed();
                 s.release();
@@ -88,8 +92,7 @@ export default class Audios extends Component {
   getLastPlayed() {
     store.get('lastPlayed')
       .then((audio) => {
-        if (audio) {
-          console.log('audio:', audio);
+        if (audio && this.state.audios[audio.slug] != undefined) {
           this.setCurrentAudio(audio, false);
         }
       })
@@ -146,25 +149,35 @@ export default class Audios extends Component {
 
   deleteAudio(slug) {
     // Remove entry from local storage.
+    console.log('deleteAudio slug:', slug);
     store.get('audios')
       .then((audios) => {
         if (audios != null) {
-          var audio = aduios[slug];
+          var audio = audios[slug];
+          var path = audio.path;
+
+          // Mark the Audio as being deleted.
+          audios[slug].deleted = true;
+          audios[slug].path = undefined;
+          store.update('audios', audios);
 
           // Remove file from file system.
           Alert.alert('Delete Audio', 'Are you sure you want to delete: ' + audio.name, [
             {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
             {text: 'OK', onPress: () => {
-              RNFS.unlink(audio.path)
+              RNFS.unlink(path)
                 .then(() => {
+
                   // Remove entry from this.state.audios.
                   delete audios[slug];
 
-                  // Mark the Audio as being deleted.
-                  audios[slug].deleted = true;
-                  store.update('audios', audios);
+                  if (this.state.currentAudio.name == audio.name) {
+                    lastPlayed = undefined;
+                  } else {
+                    lastPlayed = this.state.currentAudio;
+                  }
 
-                  this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios)});
+                  this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios), currentAudio: lastPlayed});
                 })
                 .catch((error) => {
                   console.log('RNFS.unlink error:', error);

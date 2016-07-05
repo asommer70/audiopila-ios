@@ -7,9 +7,9 @@ import {
   ListView
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
+var FileDownload = require('react-native-file-download');
 var RNFS = require('react-native-fs');
 var store = require('react-native-simple-store');
-var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 var moment = require('moment');
 
@@ -29,8 +29,35 @@ export default class PilaAudios extends Component {
     }
   }
 
-  download(name) {
-    console.log('downloading:', name);
+  download(slug) {
+    console.log('downloading:', slug);
+    var audio = this.props.audios[slug];
+    console.log('audio.httpUrl:', audio.httpUrl, 'audio.name:', audio.name);
+
+    const headers = {
+      'Accept-Language': 'en-US'
+    }
+
+    // Check file extension.
+    var ext = audio.name.substr(audio.name.length - 4);
+    if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
+
+      // FileDownload.addListener(audio.httpUrl, (info) => {
+      //   console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
+      //   this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
+      // });
+
+      FileDownload.download(audio.downloadUrl, RNFS.DocumentDirectoryPath, audio.name, headers)
+      .then((response) => {
+        Actions.audios({type: 'reset', download: true});
+      })
+      .catch((error) => {
+        console.log('download error:', error);
+        Alert.alert('File could not be downloaded...');
+      })
+    } else {
+      Alert.alert('Sorry this device can only handle mp3, mp4, and m4a files at this time.')
+    }
   }
 
   _renderRow(rowData, sectionID, rowID) {
@@ -48,7 +75,7 @@ export default class PilaAudios extends Component {
             <ImageButton
               imageSrc={require('./img/download-icon.png')}
               buttonStyle={styles.actionButton}
-              onPress={this.download.bind(this, rowData.name)}
+              onPress={this.download.bind(this, rowData.slug)}
             />
         </View>
     );
