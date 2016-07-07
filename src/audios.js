@@ -70,7 +70,7 @@ export default class Audios extends Component {
                   file.playbackTime = 0;
                 }
 
-                file.repository = {name: 'root', path: '/'};
+                file.repository = {name: 'root', path: '/', slug: 'root'};
                 for (var key in audios) {
                   if (audios[key].deleted) {
                     delete audios[key];

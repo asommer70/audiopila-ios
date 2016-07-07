@@ -29,6 +29,7 @@ export default class Pilas extends Component {
     store.get('pilas')
       .then((pilas) => {
         if (pilas) {
+
           // Remove this device from the pilas list.
           var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
           if (pilas[me] != undefined) {
@@ -42,6 +43,8 @@ export default class Pilas extends Component {
             if (pila) {
               this.setState({pila: pila});
             }
+            // store.delete('pilas');
+            // store.delete('pila');
           })
       })
   }
@@ -49,7 +52,7 @@ export default class Pilas extends Component {
   sync(name) {
     var pila = this.state.pilas[name];
 
-    PilaApi.syncToUrl(pila.httpUrl, (error, data) => {
+    PilaApi.syncToUrl(pila.baseUrl + '/sync', (error, data) => {
       if (error) {
         if (error.message.status) {
           Alert.alert(`There was a problem syncing to that URL status code is: ${error.message.status}`)
@@ -168,6 +171,8 @@ const styles = StyleSheet.create({
 
   pilas: {
     marginTop: 5,
+    marginBottom: 5,
+    height: 315,
   },
 
   separator: {

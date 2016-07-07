@@ -61,6 +61,7 @@ export default class PilaAudios extends Component {
   }
 
   updateProgress(progress) {
+    console.log('progress:', progress);
     this.setState({ progress });
   }
 
