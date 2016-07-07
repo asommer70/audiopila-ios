@@ -69,7 +69,6 @@ export default class Pilas extends Component {
   }
 
   pilaAudios(name) {
-    console.log('name:', name, 'pilaAudios...', 'this.state.pilas[name]:', this.state.pilas[name]);
     Actions.pilaAudios({audios: this.state.pilas[name].audios, title: 'Pila ' + name + ' Audios'})
   }
 

@@ -30,7 +30,6 @@ export default class PilasModal extends Component {
 
     store.get('pilas')
       .then((pilas) => {
-        console.log('pilas:', pilas);
         if (pilas) {
           // Remove this device from the pilas list.
           var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
@@ -43,15 +42,6 @@ export default class PilasModal extends Component {
       })
   }
 
-  updateProgress(res) {
-    console.log('res:', res);
-    // var progress = Math.floor((res.totalBytesSent / res.totalBytesExpectedToSend) * 100;
-    var progress = Math.floor(res.totalBytesSent / res.totalBytesExpectedToSend);
-    // var progress = (res.totalBytesSent / res.totalBytesExpectedToSend)
-    // console.log('progress:', progress);
-    this.setState({ progress: progress });
-  }
-
   getProgress(offset) {
     var progress = this.state.progress + offset;
     return Math.sin(progress % Math.PI) % 1;
@@ -62,17 +52,6 @@ export default class PilasModal extends Component {
     var ext = audio.name.substr(audio.name.length - 3);
 
     this.setState({uploading: true}, () => {
-      var uploadBegin = (response) => {
-        var jobId = response.jobId;
-        console.log('UPLOAD HAS BEGUN! JobId: ' + jobId);
-      };
-
-      var uploadProgress = (res) => {
-        console.log('res:', res);
-        // var percentage = Math.floor((res.totalBytesSent/res.totalBytesExpectedToSend) * 100);
-        // console.log('UPLOAD IS ' + percentage + '% DONE!');
-        // this.updateProgress(res);
-      };
 
       RNFS.uploadFiles({
         toUrl: pila.baseUrl + '/repos/' + slug,
@@ -90,8 +69,7 @@ export default class PilasModal extends Component {
           audio: audio.name,
           slug: slug,
         },
-        begin: (res) => {console.log('beginning upload...')},
-        progress: uploadProgress,
+        progressCallback: (res) => { this.setState({progress: res.totalBytesSent / res.totalBytesExpectedToSend}) },
       })
       .then((response) => {
         // var data = JSON.parse(response.response);

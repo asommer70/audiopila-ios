@@ -15,7 +15,6 @@ export default class PilaApi {
         body: JSON.stringify(data)
       })
       .then((response) => {
-        console.log('response.status:', response.status);
         if (response.status == 200) {
           return response.json();
         } else {
@@ -24,7 +23,6 @@ export default class PilaApi {
       })
       .then((data) => {
         if (data) {
-          console.log('returned data:', data);
           this.savePila(data);
           callback(null, data);
         }
