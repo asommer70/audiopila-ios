@@ -200,30 +200,54 @@ export default class Audios extends Component {
           store.get('audios')
             .then((audios) => {
               if (audios != null) {
-                var audio = audios[this.state.currentAudio.slug];
-                audios[this.state.currentAudio.slug].playbackTime = seconds;
-                store.update('audios', audios);
-
-                store.get('lastPlayed')
-                  .then((lastAudio) => {
-                    if (lastAudio) {
-                      store.update('lastPlayed', audio)
-                    } else {
-                      store.save('lastPlayed', audio)
-                    }
-                  })
+                this.savePlaybackTime(seconds);
               }
             })
         } else {
-          this.state.currentAudio.play();
+          this.state.currentAudio.play(() => {
+            // Reset playbackTime to 0 onEnd.
+            this.savePlaybackTime(0, () => {
+              var audios = this.state.audios;
+              audios[this.state.currentAudio.slug].playbackTime = 0;
+              // Setting the name too because it didn't seem to refresh without it for whatever reason...
+              audios[this.state.currentAudio.slug].name = audios[this.state.currentAudio.slug].name + ' ';
+
+              this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
+            });
+            this.setState({playing: false});
+          });
           this.setState({playing: true});
         }
       })
     }
   }
 
+  savePlaybackTime(seconds, callback) {
+    // Save playbackTime to store.
+    store.get('audios')
+      .then((audios) => {
+        if (audios != null) {
+          var audio = audios[this.state.currentAudio.slug];
+          audios[this.state.currentAudio.slug].playbackTime = seconds;
+          store.update('audios', audios);
+
+          store.get('lastPlayed')
+            .then((lastAudio) => {
+              if (lastAudio) {
+                store.update('lastPlayed', audio)
+              } else {
+                store.save('lastPlayed', audio)
+              }
+
+              if (callback) {
+                callback();
+              }
+            })
+        }
+      })
+  }
+
   choosePila(slug) {
-    console.log('choosePila slug:', slug);
     Actions.pilasModal({title: 'Upload To', audio: this.state.audios[slug]});
   }
 

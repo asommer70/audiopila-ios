@@ -12,16 +12,11 @@ import ImageButton from './image_button';
 export default class Audio extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       currentAudio: undefined,
-      playbackTime: this.props.audio.playbackTime,
       playing: false
     }
-  }
-
-  componentDidMount() {
-    store.get(this.props.audio.slug)
   }
 
   setProgress(value) {
@@ -63,7 +58,7 @@ export default class Audio extends Component {
           />
         </View>
 
-        <Slider value={this.state.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
+        <Slider value={this.props.audio.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
       </View>
     )
   }
