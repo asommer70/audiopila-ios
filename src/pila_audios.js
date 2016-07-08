@@ -48,7 +48,7 @@ export default class PilaAudios extends Component {
           progress: (res) => {this.updateProgress(res.bytesWritten / res.contentLength)}
         })
         .then((response) => {
-          Actions.audios({type: 'reset', download: true});
+          Actions.audios({type: 'reset', download: true, audio: audio});
         })
         .catch((error) => {
           console.log('download error:', error);

@@ -41,6 +41,8 @@ export default class Audios extends Component {
           audios = {};
         }
 
+        console.log('setAudios audios:', audios);
+
         RNFS.readDir(RNFS.DocumentDirectoryPath)
           .then((files) => {
             files = this.removeStoreFile(files);
@@ -66,6 +68,8 @@ export default class Audios extends Component {
 
                 if (audio != null || audio != undefined) {
                   file.playbackTime = audio.playbackTime;
+                } else if (this.props.download == true && this.props.audio != undefined) {
+                  file.playbackTime = this.props.audio.playbackTime;
                 } else {
                   file.playbackTime = 0;
                 }
@@ -177,7 +181,7 @@ export default class Audios extends Component {
                     lastPlayed = this.state.currentAudio;
                   }
 
-                  this.setState({audios: audios, dataSource: this.ds.cloneWithRows(audios), currentAudio: lastPlayed});
+                  this.setAudios();
                 })
                 .catch((error) => {
                   console.log('RNFS.unlink error:', error);
