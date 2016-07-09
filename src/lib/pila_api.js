@@ -3,6 +3,8 @@ var store = require('react-native-simple-store');
 var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 
+const DEVICE_NAME = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+
 export default class PilaApi {
   static syncToUrl(url, callback) {
     this.getSyncData(url, (data) => {
@@ -23,8 +25,13 @@ export default class PilaApi {
       })
       .then((data) => {
         if (data) {
-          this.savePila(data);
-          callback(null, data);
+
+          // TODO:as update local Audios with playbackTime.
+          this.updateAudiosSync(data.pila.audios, data.pilas[DEVICE_NAME].audios, (audios) => {
+            data.pilas[DEVICE_NAME].audios = audios;
+            this.savePila(data);
+            callback(null, data);
+          })
         }
       })
       .catch((error) => {
@@ -35,9 +42,8 @@ export default class PilaApi {
   }
 
   static getSyncData(url, callback) {
-    var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
     var data = {
-      name: deviceName,
+      name: DEVICE_NAME,
       platform: Platform.OS,
       type: 'pila'
     }
@@ -67,7 +73,27 @@ export default class PilaApi {
         } else {
           pilas[data.pila.name] = data.pila;
           store.update('pilas', pilas);
+          store.update('pila', data.pila);
         }
       })
+  }
+
+  static updateAudiosSync(remoteAudios, localAudios, callback) {
+    for (var key in remoteAudios) {
+      var remoteAudio = remoteAudios[key];
+      var localAudio = localAudios[key];
+
+      if (localAudio != undefined) {
+        if (localAudio.playedTime != undefined) {
+          if (remoteAudio.playedTime > localAudio.playedTime) {
+            localAudios[key].playbackTime = remoteAudio.playbackTime;
+          }
+        } else {
+          localAudios[key].playbackTime = remoteAudio.playbackTime;
+        }
+      }
+    }
+
+    callback(localAudios);
   }
 }

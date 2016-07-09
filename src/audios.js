@@ -68,10 +68,13 @@ export default class Audios extends Component {
 
                 if (audio != null || audio != undefined) {
                   file.playbackTime = audio.playbackTime;
+                  file.playedTime = audio.playedTime;
                 } else if (this.props.download == true && this.props.audio != undefined) {
                   file.playbackTime = this.props.audio.playbackTime;
+                  file.playedTime = audio.playedTime;
                 } else {
                   file.playbackTime = 0;
+                  file.playedTime = audio.playedTime; 
                 }
 
                 file.repository = {name: 'root', path: '/', slug: 'root'};
@@ -233,6 +236,8 @@ export default class Audios extends Component {
         if (audios != null) {
           var audio = audios[this.state.currentAudio.slug];
           audios[this.state.currentAudio.slug].playbackTime = seconds;
+          audios[this.state.currentAudio.slug].playedTime = Date.now();
+
           store.update('audios', audios);
 
           store.get('lastPlayed')

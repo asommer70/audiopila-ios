@@ -26,26 +26,33 @@ export default class Pilas extends Component {
       pila: undefined
     }
 
-    store.get('pilas')
-      .then((pilas) => {
-        if (pilas) {
+    this.setPilas(false);
+  }
 
-          // Remove this device from the pilas list.
-          var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
-          if (pilas[me] != undefined) {
-            delete pilas[me];
-          }
-          this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
-        }
-
+  setPilas(synced) {
+    console.log('setPilas...')
         store.get('pila')
           .then((pila) => {
             if (pila) {
-              this.setState({pila: pila});
+              if (synced) {
+                console.log('synced:', synced);
+                pila.name = pila.name + ' ';
+              }
+              this.setState({pila: pila}, () => {
+                store.get('pilas')
+                  .then((pilas) => {
+                    if (pilas) {
+
+                      // Remove this device from the pilas list.
+                      var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+                      if (pilas[me] != undefined) {
+                        delete pilas[me];
+                      }
+                      this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
+                    }
+                  })
+              });
             }
-            // store.delete('pilas');
-            // store.delete('pila');
-          })
       })
   }
 
@@ -60,8 +67,10 @@ export default class Pilas extends Component {
           Alert.alert(error.message);
         }
       } else {
-        this.setState({httpSyncUrl: ''});
-        Alert.alert(data.message);
+        console.log('data:', data);
+        Alert.alert(data.message, null, [{text: 'OK', onPress: () => {
+          this.setPilas(true);
+        }}]);
       }
     })
     // store.delete('pilas');
@@ -126,7 +135,6 @@ export default class Pilas extends Component {
       pila = (
         <View style={styles.pila}>
           <Text>Haven't synced to another Audio Pila!... yet.</Text>
-          <Button text={'Settings'} onPress={Actions.settings} buttonStyle={{width: 200}} />
         </View>
       )
     }
