@@ -68,13 +68,14 @@ export default class Audios extends Component {
 
                 if (audio != null || audio != undefined) {
                   file.playbackTime = audio.playbackTime;
-                  file.playedTime = audio.playedTime;
                 } else if (this.props.download == true && this.props.audio != undefined) {
                   file.playbackTime = this.props.audio.playbackTime;
-                  file.playedTime = audio.playedTime;
                 } else {
                   file.playbackTime = 0;
-                  file.playedTime = audio.playedTime; 
+                }
+
+                if (audio && audio.hasOwnProperty('playedTime')) {
+                  file.playedTime = audio.playedTime;
                 }
 
                 file.repository = {name: 'root', path: '/', slug: 'root'};
@@ -211,10 +212,13 @@ export default class Audios extends Component {
               }
             })
         } else {
+          var audios = this.state.audios;
+          audios[this.state.currentAudio.slug].playedTime = Date.now();
+
           this.state.currentAudio.play(() => {
             // Reset playbackTime to 0 onEnd.
             this.savePlaybackTime(0, () => {
-              var audios = this.state.audios;
+              // var audios = this.state.audios;
               audios[this.state.currentAudio.slug].playbackTime = 0;
               // Setting the name too because it didn't seem to refresh without it for whatever reason...
               audios[this.state.currentAudio.slug].name = audios[this.state.currentAudio.slug].name + ' ';
@@ -223,7 +227,7 @@ export default class Audios extends Component {
             });
             this.setState({playing: false});
           });
-          this.setState({playing: true});
+          this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }
       })
     }

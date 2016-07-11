@@ -83,6 +83,8 @@ export default class PilaApi {
       var remoteAudio = remoteAudios[key];
       var localAudio = localAudios[key];
 
+      console.log('localAudio:', localAudio);
+
       if (localAudio != undefined) {
         if (localAudio.playedTime != undefined) {
           if (remoteAudio.playedTime > localAudio.playedTime) {

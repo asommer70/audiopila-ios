@@ -6,31 +6,18 @@ import {
   Slider
 } from 'react-native';
 var store = require('react-native-simple-store');
+var moment = require('moment');
 
 import ImageButton from './image_button';
 
 export default class Audio extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      currentAudio: undefined,
-      playing: false
-    }
-  }
-
-  setProgress(value) {
-    this.setState({playbackTime: value}, () => {
-      this.state.currentAudio.setCurrentTime(value);
-    })
-  }
-
   render() {
     var audio = this.props.audio;
 
     return (
       <View key={audio.name}>
         <Text style={styles.name}>{audio.name}</Text>
+        <Text>Last Played: {audio.hasOwnProperty('playedTime') == false ? 'Never... yet.' : moment(audio.playedTime).fromNow()}</Text>
 
         <View style={styles.row}>
           <ImageButton
@@ -81,7 +68,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#424242',
     marginBottom: 5,
-    fontSize: 18
+    fontSize: 18,
+    fontWeight: 'bold'
   },
 
   progressView: {
