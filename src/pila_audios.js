@@ -74,7 +74,8 @@ export default class PilaAudios extends Component {
     var actionUrl = this.props.pila.baseUrl + '/audios/' + slug;
 
     PilaApi.sendAction(actionUrl, action, (data) => {
-      if (data.message != 'playing') {
+      // console.log('pila_audios sendAction data:', data);
+      if (data.message != 'playing' && data.message != 'nothing') {
         // Update the Audio.
         store.get('pilas')
           .then((pilas) => {
@@ -103,7 +104,7 @@ export default class PilaAudios extends Component {
           <Text style={styles.label}>Name:</Text>
           <Text>{rowData.name}</Text>
           <Text style={styles.label}>Playback Time:</Text>
-          <Text>{Math.round(rowData.playbackTime)}</Text>
+          <Text>{Math.round(rowData.playbackTime)}s</Text>
           <Text style={styles.label}>Duration:</Text>
           <Text>{moment.duration(Math.round(rowData.duration), 'seconds').humanize()}</Text>
           <Text style={styles.label}>Path:</Text>
@@ -117,6 +118,12 @@ export default class PilaAudios extends Component {
             />
 
             <ImageButton
+              imageSrc={require('./img/backward-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sendAction.bind(this, 'backward', rowData.slug)}
+            />
+
+            <ImageButton
               imageSrc={require('./img/play-icon.png')}
               buttonStyle={styles.actionButton}
               onPress={this.sendAction.bind(this, 'play', rowData.slug)}
@@ -126,6 +133,12 @@ export default class PilaAudios extends Component {
               imageSrc={require('./img/pause-icon.png')}
               buttonStyle={styles.actionButton}
               onPress={this.sendAction.bind(this, 'pause', rowData.slug)}
+            />
+
+            <ImageButton
+              imageSrc={require('./img/forward-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sendAction.bind(this, 'forward', rowData.slug)}
             />
           </View>
         </View>
