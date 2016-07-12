@@ -25,17 +25,15 @@ export default class PilaApi {
       })
       .then((data) => {
         if (data) {
-
-          // TODO:as update local Audios with playbackTime.
           this.updateAudiosSync(data.pila.audios, data.pilas[DEVICE_NAME].audios, (audios) => {
             data.pilas[DEVICE_NAME].audios = audios;
             this.savePila(data);
+            this.saveAudios(audios);
             callback(null, data);
           })
         }
       })
       .catch((error) => {
-        console.log('PilaApi.syncToUrl error:', error);
         callback(error, null);
       });
     })
@@ -78,12 +76,21 @@ export default class PilaApi {
       })
   }
 
+  static saveAudios(data) {
+    store.get('audios')
+      .then((audios) => {
+        if (!audios) {
+          store.save('audios', data);
+        } else {
+          store.update('audios', data);
+        }
+      })
+  }
+
   static updateAudiosSync(remoteAudios, localAudios, callback) {
     for (var key in remoteAudios) {
       var remoteAudio = remoteAudios[key];
       var localAudio = localAudios[key];
-
-      console.log('localAudio:', localAudio);
 
       if (localAudio != undefined) {
         if (localAudio.playedTime != undefined) {

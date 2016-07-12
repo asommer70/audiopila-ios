@@ -34,7 +34,6 @@ export default class Audios extends Component {
   }
 
   setAudios() {
-    // this.syncFiles();
     store.get('audios')
       .then((audios) => {
         if (!audios) {
