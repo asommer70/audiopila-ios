@@ -78,7 +78,7 @@ export default class Pilas extends Component {
   }
 
   pilaAudios(name) {
-    Actions.pilaAudios({audios: this.state.pilas[name].audios, title: 'Pila ' + name + ' Audios'})
+    Actions.pilaAudios({pila: this.state.pilas[name], audios: this.state.pilas[name].audios, title: 'Pila ' + name + ' Audios'})
   }
 
   deletePila(name) {
@@ -95,7 +95,7 @@ export default class Pilas extends Component {
             delete pilas[name];
             delete pilas[deviceName];
           }
-          
+
           this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) }, () => {
             // Put this device back into the list and update store.
             pilas[deviceName] = me;

@@ -105,4 +105,31 @@ export default class PilaApi {
 
     callback(localAudios);
   }
+
+  static sendAction(url, action, callback) {
+    fetch(url, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({action: action})
+    })
+    .then((response) => {
+      if (response.status == 200) {
+        return response.json();
+      } else {
+        callback({message: response}, null)
+      }
+    })
+    .then((data) => {
+      if (data) {
+        console.log('sendAction data:', data);
+        callback(data);
+      }
+    })
+    .catch((error) => {
+      callback(error, null);
+    });
+  }
 }

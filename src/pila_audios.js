@@ -70,6 +70,33 @@ export default class PilaAudios extends Component {
     return Math.sin(progress % Math.PI) % 1;
   }
 
+  sendAction(action, slug) {
+    var actionUrl = this.props.pila.baseUrl + '/audios/' + slug;
+
+    PilaApi.sendAction(actionUrl, action, (data) => {
+      if (data.message != 'playing') {
+        // Update the Audio.
+        store.get('pilas')
+          .then((pilas) => {
+            // console.log('pilas:', pilas);
+            if (pilas) {
+              var pila = pilas[this.props.pila.name];
+
+              // Update the audio.
+              pila.audios[data.audio.slug].playbackTime = data.audio.playbackTime;
+              pila.audios[data.audio.slug].playedTime = data.audio.playedTime;
+
+              pilas[pila.name] = pila;
+              store.save('pilas', pilas)
+                .then(() => {
+                  this.setState({dataSource: this.ds.cloneWithRows(pila.audios)});
+                })
+            }
+          })
+      }
+    })
+  }
+
   _renderRow(rowData, sectionID, rowID) {
     return (
         <View style={styles.pila}>
@@ -82,12 +109,25 @@ export default class PilaAudios extends Component {
           <Text style={styles.label}>Path:</Text>
           <Text>{rowData.path}</Text>
 
-          <ImageButton
-            imageSrc={require('./img/download-icon.png')}
-            buttonStyle={styles.actionButton}
-            onPress={this.download.bind(this, rowData.slug)}
-          />
+          <View style={styles.row}>
+            <ImageButton
+              imageSrc={require('./img/download-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.download.bind(this, rowData.slug)}
+            />
 
+            <ImageButton
+              imageSrc={require('./img/play-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sendAction.bind(this, 'play', rowData.slug)}
+            />
+
+            <ImageButton
+              imageSrc={require('./img/pause-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.sendAction.bind(this, 'pause', rowData.slug)}
+            />
+          </View>
         </View>
     );
   }
