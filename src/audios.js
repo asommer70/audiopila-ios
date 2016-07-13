@@ -202,7 +202,11 @@ export default class Audios extends Component {
       this.state.currentAudio.getCurrentTime((seconds, isPlaying) => {
         if (isPlaying == true) {
           this.state.currentAudio.pause();
-          this.setState({playing: false});
+
+          // Update the current Audios.
+          var audios = this.state.audios;
+          audios[this.state.currentAudio.slug].playbackTime = seconds;
+          this.setState({playing: false, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
 
           // Save playbackTime to store.
           store.get('audios')
@@ -230,6 +234,7 @@ export default class Audios extends Component {
             });
             this.setState({playing: false});
           });
+          console.log('play audios:', audios);
           this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }
         // this.getLastPlayed();

@@ -34,7 +34,7 @@ export default class Audio extends Component {
         </View>
 
         <Slider
-          value={this.props.audio.playbackTime}
+          value={audio.playbackTime}
           maximumValue={audio.duration}
           onSlidingComplete={(value) => this.props.setProgress(value)}
           minimumTrackTintColor={'#903749'}
@@ -42,6 +42,10 @@ export default class Audio extends Component {
           thumbImage={require('../img/circle-icon.png')}
           style={styles.slider}
         />
+
+        <View style={[styles.row, styles.center]}>
+          <Text>{Math.round(audio.playbackTime)}s/{Math.round(audio.duration)}s</Text>
+        </View>
 
         <View style={styles.row}>
           <ImageButton

@@ -19,6 +19,13 @@ const MainStyles = StyleSheet.create({
     backgroundColor: colors.secondaryOne,
   },
 
+  bigShadow: {
+    shadowColor: colors.accentTwo,
+    shadowOffset: {width: 3, height: 3},
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    backgroundColor: colors.secondaryTwo,
+  },
 
   //
   // Audios components
@@ -99,6 +106,44 @@ const MainStyles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 20,
     color: colors.primaryTwo,
+  },
+
+  //
+  // CurrentAudio component
+  //
+  currentPlayer: {
+    marginTop: 70,
+    marginBottom: 10,
+    padding: 5,
+    paddingBottom: 10,
+    width: 300,
+    borderWidth: 2,
+    borderColor: colors.primaryTwo,
+  },
+
+  name: {
+    fontSize: 20,
+    color: colors.primaryTwo,
+    fontWeight: 'bold',
+  },
+
+  center: {
+    alignSelf: 'center',
+  },
+
+  actionButton: {
+    width: 70,
+    height: 70,
+    paddingLeft: 25,
+    paddingRight: 25
+  },
+
+  disabledButton: {
+    width: 70,
+    height: 70,
+    paddingLeft: 25,
+    paddingRight: 25,
+    backgroundColor: colors.secondaryOne
   }
 });
 

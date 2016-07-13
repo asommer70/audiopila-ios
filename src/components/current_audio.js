@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import ImageButton from './image_button';
+import styles from '../styles/main_styles';
 
 const CurrentAudio = (props) => {
   var image;
@@ -22,11 +23,9 @@ const CurrentAudio = (props) => {
     buttonStyles = styles.actionButton;
   }
 
-  console.log('props:', props);
-
   return (
-    <View style={styles.container}>
-      <View style={styles.currentPlayer}>
+    <View style={styles.center}>
+      <View style={[styles.currentPlayer, styles.bigShadow]}>
         <Text style={styles.name}>{props.playing ? 'Currently Playing:' : 'Last Played:'}</Text>
         <Text>{props.currentAudio.name}</Text>
 
@@ -37,49 +36,5 @@ const CurrentAudio = (props) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center'
-  },
-
-  currentPlayer: {
-    marginTop: 70,
-    marginBottom: 10,
-    padding: 5,
-    paddingBottom: 10,
-    width: 300,
-    borderWidth: 1,
-    borderColor: '#2B2E4A',
-    shadowColor:'#2B2E4A',
-    shadowOffset: {width: 1, height: 3},
-    shadowOpacity: 0.4,
-    shadowRadius: 1,
-    backgroundColor: '#FEFFE4',
-  },
-
-  name: {
-    fontSize: 20,
-  },
-
-  center: {
-    alignSelf: 'center',
-  },
-
-  actionButton: {
-    width: 70,
-    height: 70,
-    paddingLeft: 25,
-    paddingRight: 25
-  },
-
-  disabledButton: {
-    width: 70,
-    height: 70,
-    paddingLeft: 25,
-    paddingRight: 25,
-    backgroundColor: '#E7E3C5'
-  }
-});
 
 export default CurrentAudio;
