@@ -15,6 +15,7 @@ import Button from './components/button';
 import ImageButton from './components/image_button';
 import Audio from './components/audio';
 import CurrentAudio from './components/current_audio';
+import styles from './styles/main_styles';
 
 export default class Audios extends Component {
   constructor(props) {
@@ -214,11 +215,14 @@ export default class Audios extends Component {
           var audios = this.state.audios;
           audios[this.state.currentAudio.slug].playedTime = Date.now();
 
+          var currentAudio = this.state.currentAudio;
+          currentAudio.playedTime = Date.now();
+
           this.state.currentAudio.play(() => {
             // Reset playbackTime to 0 onEnd.
             this.savePlaybackTime(0, () => {
-              // var audios = this.state.audios;
               audios[this.state.currentAudio.slug].playbackTime = 0;
+
               // Setting the name too because it didn't seem to refresh without it for whatever reason...
               audios[this.state.currentAudio.slug].name = audios[this.state.currentAudio.slug].name + ' ';
 
@@ -228,6 +232,7 @@ export default class Audios extends Component {
           });
           this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }
+        // this.getLastPlayed();
       })
     }
   }
@@ -238,16 +243,15 @@ export default class Audios extends Component {
       .then((audios) => {
         if (audios != null) {
           var audio = audios[this.state.currentAudio.slug];
-          audios[this.state.currentAudio.slug].playbackTime = seconds;
-          audios[this.state.currentAudio.slug].playedTime = Date.now();
+          audios[audio.slug].playbackTime = seconds;
+          audios[audio.slug].playedTime = Date.now();
+          audio.playedTime = Date.now();
 
           store.update('audios', audios);
 
           store.get('lastPlayed')
             .then((lastAudio) => {
               if (lastAudio) {
-                store.update('lastPlayed', audio)
-              } else {
                 store.save('lastPlayed', audio)
               }
 
@@ -296,24 +300,3 @@ export default class Audios extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E7E3C5',
-  },
-
-  audioList: {
-    marginTop: 5,
-  },
-
-  separator: {
-    height: 1,
-    backgroundColor: '#903749',
-  },
-
-  audio: {
-    marginTop: 10,
-    padding: 10
-  },
-});

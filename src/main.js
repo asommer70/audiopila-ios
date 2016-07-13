@@ -8,6 +8,8 @@ import PilaAudios from './pila_audios';
 import PilasModal from './pilas_modal';
 import TabIcon from './components/tabicon';
 
+import { colors } from './styles/main_styles';
+
 export default class Main extends Component {
   constructor() {
     super();
@@ -30,42 +32,51 @@ export default class Main extends Component {
               key="audios"
               onRight={() => Actions.settings()}
               rightTitle={"Settings"}
-              rightButtonTextStyle={{color: '#FEFFE4'}}
+              rightButtonTextStyle={{color: colors.secondaryTwo}}
               onLeft={() => Actions.pilas()}
               leftTitle={"Pilas"}
-              leftButtonTextStyle={{color: '#FEFFE4'}}
+              leftButtonTextStyle={{color: colors.secondaryTwo}}
               component={Audios}
               title="Audios"
               initial={true}
               icon={TabIcon}
-              navigationBarStyle={{backgroundColor: '#54777D'}}
-              titleStyle={{color: '#FEFFE4'}}
+              navigationBarStyle={{backgroundColor: colors.primaryOne}}
+              titleStyle={{color: colors.secondaryTwo}}
             />
             <Scene
               key="settings"
               component={Settings}
               title="Settings"
               icon={TabIcon}
-              navigationBarStyle={{backgroundColor:'silver'}}
-              titleStyle={{color:'white'}}
+              navigationBarStyle={{backgroundColor: colors.primaryOne}}
+              titleStyle={{color: colors.secondaryTwo}}
+              backButtonImage={require('./img/back-icon.png')}
             />
             <Scene
               key="pilas"
               component={Pilas}
               title="Pilas"
               icon={TabIcon}
-              navigationBarStyle={{backgroundColor:'#424242'}}
-              titleStyle={{color:'white'}}
+              navigationBarStyle={{backgroundColor: colors.primaryOne}}
+              titleStyle={{color: colors.secondaryTwo}}
+              backButtonImage={require('./img/back-icon.png')}
             />
             <Scene
               key="pilaAudios"
               component={PilaAudios}
               title="Pila Audios"
               icon={TabIcon}
-              navigationBarStyle={{backgroundColor:'orange'}}
-              titleStyle={{color:'red'}}
+              navigationBarStyle={{backgroundColor: colors.primaryOne}}
+              titleStyle={{color: colors.secondaryTwo}}
+              backButtonImage={require('./img/back-icon.png')}
             />
-            <Scene key="pilasModal" component={PilasModal} />
+            <Scene
+              key="pilasModal"
+              component={PilasModal}
+              navigationBarStyle={{backgroundColor: colors.primaryOne}}
+              titleStyle={{color: colors.secondaryTwo}}
+              backButtonImage={require('./img/back-icon.png')}
+            />
         </Scene>
       </Router>
     )

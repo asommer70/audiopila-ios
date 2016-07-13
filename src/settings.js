@@ -14,12 +14,15 @@ var store = require('react-native-simple-store');
 var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 
+import styles, { colors } from './styles/main_styles';
 import Button from './components/button';
 import PilaApi from './lib/pila_api';
 
 export default class Settings extends Component {
   constructor(props) {
     super(props);
+
+    console.log('colors:', colors);
 
     this.state = {
       downloadUrl: '',
@@ -85,7 +88,7 @@ export default class Settings extends Component {
   render() {
     var progressBar;
     if (this.state.downloading) {
-      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)}/>;
+      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)} progressTintColor={colors.primaryTwo}/>;
     } else {
       progressBar = <View/>;
     }
@@ -140,47 +143,3 @@ export default class Settings extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 60
-  },
-
-  wrapper: {
-    marginTop: 40,
-    alignSelf: 'center',
-    flex: 1,
-  },
-
-  formWrapper: {
-    backgroundColor: '#ffffff',
-    padding: 20
-  },
-
-  input: {
-    padding: 4,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#424242',
-    borderRadius: 3,
-    marginTop: 5,
-    marginBottom: 5,
-    width: 200,
-    alignSelf: 'flex-end',
-    color: '#424242'
-  },
-
-  downloadButton: {
-    width: 200
-  },
-
-  downloadText: {
-    fontSize: 14,
-  },
-
-  progressView: {
-    marginTop: 10,
-  }
-
-});

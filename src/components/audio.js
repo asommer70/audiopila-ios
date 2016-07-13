@@ -33,7 +33,15 @@ export default class Audio extends Component {
           />
         </View>
 
-        <Slider value={this.props.audio.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
+        <Slider
+          value={this.props.audio.playbackTime}
+          maximumValue={audio.duration}
+          onSlidingComplete={(value) => this.props.setProgress(value)}
+          minimumTrackTintColor={'#903749'}
+          maximumTrackTintColor={'#54777D'}
+          thumbImage={require('../img/circle-icon.png')}
+          style={styles.slider}
+        />
 
         <View style={styles.row}>
           <ImageButton
@@ -118,5 +126,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 2, height: 2},
     shadowOpacity: 0.4,
     shadowRadius: 2
+  },
+
+  slider: {
+    shadowColor:'#424242',
+    shadowOffset: {width: 1, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 1
   }
 });
