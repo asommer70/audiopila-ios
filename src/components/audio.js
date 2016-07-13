@@ -15,11 +15,11 @@ export default class Audio extends Component {
     var audio = this.props.audio;
 
     return (
-      <View key={audio.name}>
+      <View key={audio.name} style={styles.audio}>
         <Text style={styles.name}>{audio.name}</Text>
         <Text>Last Played: {audio.hasOwnProperty('playedTime') == false ? 'Never... yet.' : moment(audio.playedTime).fromNow()}</Text>
 
-        <View style={styles.row}>
+        <View style={[styles.row, styles.center]}>
           <ImageButton
             imageSrc={require('../img/play-icon.png')}
             buttonStyle={styles.actionButton}
@@ -31,10 +31,14 @@ export default class Audio extends Component {
             buttonStyle={styles.actionButton}
             onPress={this.props.setAudio.bind(this, this.props.audio.slug)}
           />
+        </View>
 
+        <Slider value={this.props.audio.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
+
+        <View style={styles.row}>
           <ImageButton
             imageSrc={require('../img/upload-icon.png')}
-            buttonStyle={styles.actionButton}
+            buttonStyle={styles.iconButton}
             onPress={this.props.choosePila.bind(this, this.props.audio.slug)}
           />
 
@@ -44,8 +48,6 @@ export default class Audio extends Component {
             onPress={this.props.deleteAudio.bind(this, this.props.audio.slug)}
           />
         </View>
-
-        <Slider value={this.props.audio.playbackTime} maximumValue={audio.duration} onSlidingComplete={(value) => this.props.setProgress(value)} />
       </View>
     )
   }
@@ -64,9 +66,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  center: {
+    alignSelf: 'center'
+  },
+
+  audio: {
+    backgroundColor: '#FEFFE4',
+    padding: 10,
+    shadowColor:'#424242',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.3,
+    shadowRadius: 1
+  },
+
   name: {
     textAlign: 'center',
-    color: '#424242',
+    color: '#903749',
     marginBottom: 5,
     fontSize: 18,
     fontWeight: 'bold'
@@ -77,15 +92,31 @@ const styles = StyleSheet.create({
   },
 
   actionButton: {
-    width: 40,
+    width: 60,
+    height: 60,
     paddingLeft: 25,
     paddingRight: 25,
-    marginRight: 10
+    marginRight: 10,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+
+  iconButton: {
+    width: 50,
+    height: 50,
   },
 
   deleteButton: {
-    width: 40,
-    height: 40,
-    marginLeft: 50
+    width: 30,
+    height: 30,
+    marginLeft: 25,
+    borderRadius: 20,
+    borderWidth: 0,
+    padding: 0,
+    backgroundColor: '#FEFFE4',
+    shadowColor:'#424242',
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   }
 });

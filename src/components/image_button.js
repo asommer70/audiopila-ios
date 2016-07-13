@@ -17,7 +17,7 @@ class ImageButton extends Component {
     }
 
     return (
-      <TouchableHighlight style={[styles.button, this.props.buttonStyle]} underlayColor={'gray'} onPress={this.props.onPress}>
+      <TouchableHighlight style={[styles.button, this.props.buttonStyle]} underlayColor={'#EADB9D'} onPress={this.props.onPress}>
         <View style={this.props.imagePos}>
           {image}
           {this.props.text ? <Text style={[styles.buttonText, this.props.textType]}>{this.props.text}</Text> : <View/>}
@@ -36,7 +36,11 @@ var styles = StyleSheet.create({
     padding: 5,
     borderColor: '#DBDEE3',
     marginTop: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#54777D',
+    shadowColor:'#424242',
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.2,
+    shadowRadius: 1
   },
 
   buttonText: {

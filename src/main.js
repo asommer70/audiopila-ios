@@ -30,14 +30,16 @@ export default class Main extends Component {
               key="audios"
               onRight={() => Actions.settings()}
               rightTitle={"Settings"}
+              rightButtonTextStyle={{color: '#FEFFE4'}}
               onLeft={() => Actions.pilas()}
               leftTitle={"Pilas"}
+              leftButtonTextStyle={{color: '#FEFFE4'}}
               component={Audios}
               title="Audios"
               initial={true}
               icon={TabIcon}
-              navigationBarStyle={{backgroundColor:'green'}}
-              titleStyle={{color:'white'}}
+              navigationBarStyle={{backgroundColor: '#54777D'}}
+              titleStyle={{color: '#FEFFE4'}}
             />
             <Scene
               key="settings"

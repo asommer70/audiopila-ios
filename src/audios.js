@@ -291,7 +291,6 @@ export default class Audios extends Component {
           dataSource={this.state.dataSource}
           renderRow={this._renderRow.bind(this)}
           enableEmptySections={true}
-          renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator}/>}
         />
       </View>
     );
@@ -301,7 +300,7 @@ export default class Audios extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#E7E3C5',
   },
 
   audioList: {
@@ -310,7 +309,7 @@ const styles = StyleSheet.create({
 
   separator: {
     height: 1,
-    backgroundColor: '#DBDEE3',
+    backgroundColor: '#903749',
   },
 
   audio: {
