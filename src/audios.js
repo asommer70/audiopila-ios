@@ -170,7 +170,7 @@ export default class Audios extends Component {
 
           // Remove file from file system.
           Alert.alert('Delete Audio', 'Are you sure you want to delete: ' + audio.name, [
-            {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
+            {text: 'Cancel', onPress: () => {}},
             {text: 'OK', onPress: () => {
               RNFS.unlink(path)
                 .then(() => {
@@ -233,7 +233,6 @@ export default class Audios extends Component {
             });
             this.setState({playing: false});
           });
-          console.log('play audios:', audios);
           this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }
         // this.getLastPlayed();

@@ -170,7 +170,7 @@ export default class Pilas extends Component {
       )
     } else {
       pila = (
-        <View style={styles.pila}>
+        <View style={[styles.pila, styles.whiteBackground, styles.center, styles.smallShadow, {marginTop: 100, width: 300, padding: 20}]}>
           <Text>Haven't synced to another Audio Pila!... yet.</Text>
         </View>
       )

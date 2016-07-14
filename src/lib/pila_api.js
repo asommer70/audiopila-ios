@@ -43,7 +43,9 @@ export default class PilaApi {
     var data = {
       name: DEVICE_NAME,
       platform: Platform.OS,
-      type: 'pila'
+      type: 'pila',
+      lastSynced: Date.now(),
+      syncedTo: url
     }
 
     store.get('audios')
@@ -53,11 +55,13 @@ export default class PilaApi {
           store.get('lastPlayed')
             .then((lastAudio) => {
               data.lastPlayed = lastAudio;
-              data.lastSynced = Date.now();
-              data.syncedTo = url;
 
               callback(data);
             })
+        } else {
+          data.audios = {};
+          data.lastPlayed = {};
+          callback(data);
         }
       })
   }

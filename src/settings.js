@@ -22,8 +22,6 @@ export default class Settings extends Component {
   constructor(props) {
     super(props);
 
-    console.log('colors:', colors);
-
     this.state = {
       downloadUrl: '',
       httpSyncUrl: '',
@@ -44,7 +42,6 @@ export default class Settings extends Component {
     if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
 
       FileDownload.addListener(this.state.downloadUrl, (info) => {
-        console.log(`complete ${(info.totalBytesWritten / info.totalBytesExpectedToWrite * 100)}%`);
         this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
       });
 
@@ -53,7 +50,6 @@ export default class Settings extends Component {
         Actions.audios({type: 'reset', download: true});
       })
       .catch((error) => {
-        console.log('download error:', error);
         Alert.alert('File could not be downloaded...');
       })
     } else {
