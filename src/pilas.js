@@ -24,7 +24,8 @@ export default class Pilas extends Component {
     this.state = {
       dataSource: this.ds.cloneWithRows({}),
       pilas: {},
-      pila: undefined
+      pila: undefined,
+      removedPila: false
     }
 
     this.setPilas(false);
@@ -34,10 +35,6 @@ export default class Pilas extends Component {
     store.get('pila')
       .then((pila) => {
         if (pila) {
-          if (synced) {
-            console.log('synced:', synced);
-            pila.name = pila.name + ' ';
-          }
           this.setState({pila: pila}, () => {
             store.get('pilas')
               .then((pilas) => {
@@ -48,7 +45,12 @@ export default class Pilas extends Component {
                   if (pilas[me] != undefined) {
                     delete pilas[me];
                   }
-                  this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
+
+                  if (pilas[pila.name.trim()]) {
+                    this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
+                  } else {
+                    this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas), removedPila: true });
+                  }
                 }
               })
           });
@@ -99,11 +101,22 @@ export default class Pilas extends Component {
                 delete pilas[deviceName];
               }
 
-              this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) }, () => {
-                // Put this device back into the list and update store.
-                pilas[deviceName] = me;
-                store.save('pilas', pilas);
-              });
+              store.get('pila')
+                .then((pila) => {
+                  if (pila) {
+                    if (pila.name == name) {
+                      removedPila = true;
+                    } else {
+                      removedPila = this.state.removedPila;
+                    }
+
+                    this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas), removedPila: removedPila }, () => {
+                      // Put this device back into the list and update store.
+                      pilas[deviceName] = me;
+                      store.save('pilas', pilas);
+                    });
+                  }
+                })
             }
           })
       }}
@@ -156,14 +169,14 @@ export default class Pilas extends Component {
           <View style={[styles.row, styles.centerRow]}>
             <ImageButton
               imageSrc={require('./img/sync-icon.png')}
-              buttonStyle={styles.actionButton}
-              onPress={this.sync.bind(this, this.state.pila.name)}
+              buttonStyle={this.state.removedPila == true ? styles.disabledButton : styles.actionButton}
+              onPress={this.state.removedPila == true ? () => {} : this.sync.bind(this, this.state.pila.name)}
             />
 
             <ImageButton
               imageSrc={require('./img/music-icon.png')}
-              buttonStyle={styles.actionButton}
-              onPress={this.pilaAudios.bind(this, this.state.pila.name)}
+              buttonStyle={this.state.removedPila == true ? styles.disabledButton : styles.actionButton}
+              onPress={this.state.removedPila == true ? () => {} : this.pilaAudios.bind(this, this.state.pila.name)}
             />
           </View>
         </View>

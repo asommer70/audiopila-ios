@@ -16,7 +16,7 @@ var moment = require('moment');
 import Button from './components/button';
 import ImageButton from './components/image_button';
 import PilaApi from './lib/pila_api';
-import styles from './styles/main_styles';
+import styles, { colors } from './styles/main_styles';
 
 export default class PilaAudios extends Component {
   constructor(props) {
@@ -153,7 +153,7 @@ export default class PilaAudios extends Component {
   render() {
     var progressBar;
     if (this.state.downloading) {
-      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)}/>;
+      progressBar = <ProgressViewIOS style={styles.progressView} progressTintColor={colors.primaryTwo} progress={this.getProgress(0)}/>;
     } else {
       progressBar = <View/>;
     }

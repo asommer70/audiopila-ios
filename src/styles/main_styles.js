@@ -53,6 +53,7 @@ const MainStyles = StyleSheet.create({
 
   progressView: {
     marginTop: 10,
+    marginBottom: 10
   },
 
   whiteBackground: {
@@ -142,10 +143,11 @@ const MainStyles = StyleSheet.create({
   },
 
   disabledButton: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     paddingLeft: 25,
     paddingRight: 25,
+    marginRight: 10,
     backgroundColor: colors.secondaryOne
   },
 
