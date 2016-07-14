@@ -157,7 +157,6 @@ export default class Audios extends Component {
 
   deleteAudio(slug) {
     // Remove entry from local storage.
-    console.log('deleteAudio slug:', slug);
     store.get('audios')
       .then((audios) => {
         if (audios != null) {

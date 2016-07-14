@@ -31,29 +31,28 @@ export default class Pilas extends Component {
   }
 
   setPilas(synced) {
-    console.log('setPilas...')
-        store.get('pila')
-          .then((pila) => {
-            if (pila) {
-              if (synced) {
-                console.log('synced:', synced);
-                pila.name = pila.name + ' ';
-              }
-              this.setState({pila: pila}, () => {
-                store.get('pilas')
-                  .then((pilas) => {
-                    if (pilas) {
+    store.get('pila')
+      .then((pila) => {
+        if (pila) {
+          if (synced) {
+            console.log('synced:', synced);
+            pila.name = pila.name + ' ';
+          }
+          this.setState({pila: pila}, () => {
+            store.get('pilas')
+              .then((pilas) => {
+                if (pilas) {
 
-                      // Remove this device from the pilas list.
-                      var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
-                      if (pilas[me] != undefined) {
-                        delete pilas[me];
-                      }
-                      this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
-                    }
-                  })
-              });
-            }
+                  // Remove this device from the pilas list.
+                  var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+                  if (pilas[me] != undefined) {
+                    delete pilas[me];
+                  }
+                  this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) });
+                }
+              })
+          });
+        }
       })
   }
 
@@ -84,26 +83,31 @@ export default class Pilas extends Component {
 
   deletePila(name) {
     console.log('deletePila name:', name);
-    store.get('pilas')
-      .then((pilas) => {
-        if (pilas) {
-          var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+    Alert.alert('Delete Pila', 'Are you sure you want to delete: ' + name, [
+      {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
+      {text: 'OK', onPress: () => {
+        store.get('pilas')
+          .then((pilas) => {
+            if (pilas) {
+              var deviceName = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
 
-          // Remove this device and selected Pila.
-          var me = pilas[deviceName];
+              // Remove this device and selected Pila.
+              var me = pilas[deviceName];
 
-          if (pilas[name] != undefined) {
-            delete pilas[name];
-            delete pilas[deviceName];
-          }
+              if (pilas[name] != undefined) {
+                delete pilas[name];
+                delete pilas[deviceName];
+              }
 
-          this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) }, () => {
-            // Put this device back into the list and update store.
-            pilas[deviceName] = me;
-            store.save('pilas', pilas);
-          });
-        }
-      })
+              this.setState({ pilas: pilas, dataSource: this.ds.cloneWithRows(pilas) }, () => {
+                // Put this device back into the list and update store.
+                pilas[deviceName] = me;
+                store.save('pilas', pilas);
+              });
+            }
+          })
+      }}
+    ])
   }
 
   _renderRow(rowData, sectionID, rowID) {
