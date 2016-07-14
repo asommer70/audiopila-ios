@@ -73,17 +73,9 @@ export default class PilasModal extends Component {
         progressCallback: (res) => { this.setState({progress: res.totalBytesSent / res.totalBytesExpectedToSend}) },
       })
       .then((response) => {
-        // var data = JSON.parse(response.response);
-        // console.log('upload response data:', data);
-        // Actions.pilaAudios({audios: data.pila.audios, title: 'Pila ' + data.pila.name + ' Audios'});
-        // Actions.audios({type: 'refresh'});
         Actions.pop();
       })
       .catch((err) => {
-        if(err.description === "cancelled") {
-          // cancelled by user
-        }
-        console.log(err);
         Alert.alert('File could not be uploaded...');
       });
     });

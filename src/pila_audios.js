@@ -49,11 +49,9 @@ export default class PilaAudios extends Component {
           progress: (res) => {this.updateProgress(res.bytesWritten / res.contentLength)}
         })
         .then((response) => {
-          console.log('response:', response);
           Actions.audios({type: 'reset', download: true, audio: audio});
         })
         .catch((error) => {
-          console.log('download error:', error);
           Alert.alert('File could not be downloaded...');
         })
       } else {
@@ -75,12 +73,10 @@ export default class PilaAudios extends Component {
     var actionUrl = this.props.pila.baseUrl + '/audios/' + slug;
 
     PilaApi.sendAction(actionUrl, action, (data) => {
-      // console.log('pila_audios sendAction data:', data);
       if (data.message != 'playing' && data.message != 'nothing') {
         // Update the Audio.
         store.get('pilas')
           .then((pilas) => {
-            // console.log('pilas:', pilas);
             if (pilas) {
               var pila = pilas[this.props.pila.name];
 

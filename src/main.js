@@ -20,7 +20,6 @@ export default class Main extends Component {
   }
 
   dirSync() {
-    console.log('dirSync...');
     this.setState({dirSync: true});
   }
 

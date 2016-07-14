@@ -128,7 +128,6 @@ export default class PilaApi {
     })
     .then((data) => {
       if (data) {
-        console.log('sendAction data:', data);
         callback(data);
       }
     })

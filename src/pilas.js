@@ -69,7 +69,6 @@ export default class Pilas extends Component {
           Alert.alert(error.message);
         }
       } else {
-        console.log('data:', data);
         Alert.alert(data.message, null, [{text: 'OK', onPress: () => {
           this.setPilas(true);
         }}]);
@@ -84,9 +83,8 @@ export default class Pilas extends Component {
   }
 
   deletePila(name) {
-    console.log('deletePila name:', name);
     Alert.alert('Delete Pila', 'Are you sure you want to delete: ' + name, [
-      {text: 'Cancel', onPress: () => console.log('Delete canceled...') },
+      {text: 'Cancel', onPress: () => {} },
       {text: 'OK', onPress: () => {
         store.get('pilas')
           .then((pilas) => {

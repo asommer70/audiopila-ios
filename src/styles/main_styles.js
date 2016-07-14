@@ -178,6 +178,17 @@ const MainStyles = StyleSheet.create({
     fontSize: 14,
   },
 
+  imageButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    borderColor: '#DBDEE3',
+    marginTop: 10,
+    backgroundColor: '#54777D',
+  },
+
   //
   // CurrentAudio component
   //

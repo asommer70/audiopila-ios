@@ -41,8 +41,6 @@ export default class Audios extends Component {
           audios = {};
         }
 
-        console.log('setAudios audios:', audios);
-
         RNFS.readDir(RNFS.DocumentDirectoryPath)
           .then((files) => {
             files = this.removeStoreFile(files);
@@ -51,7 +49,6 @@ export default class Audios extends Component {
             files.forEach((file) => {
               var s = new Sound(file.name, RNFS.DocumentDirectoryPath, (e) => {
                 if (e) {
-                  console.log('setAudios new Sound error:', e, 'file:', file);
                   if (this.props.download == true) {
                     Alert.alert('Failed to download file.');
                   }
@@ -135,7 +132,6 @@ export default class Audios extends Component {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
       audio.name = audioFile.name;
       if (e) {
-        console.log('setCurrentAudio error:', e);
         this.setState({currentAudio: undefined});
       } else {
         audio.slug = audioFile.slug;
@@ -187,7 +183,6 @@ export default class Audios extends Component {
                   this.setAudios();
                 })
                 .catch((error) => {
-                  console.log('RNFS.unlink error:', error);
                   Alert.alert(error.message);
                 });
             }}
