@@ -27,11 +27,23 @@ const MainStyles = StyleSheet.create({
     backgroundColor: colors.secondaryTwo,
   },
 
-  //
-  // Audios components
-  //
-  audioList: {
-    marginTop: 5,
+  smallShadow: {
+    shadowColor: colors.accentTwo,
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+  },
+
+  row: {
+    flexDirection: 'row',
+  },
+
+  center: {
+    alignSelf: 'center',
+  },
+
+  centerRow: {
+    alignItems: 'center'
   },
 
   separator: {
@@ -39,9 +51,29 @@ const MainStyles = StyleSheet.create({
     backgroundColor: colors.primaryTwo,
   },
 
-  audio: {
+  progressView: {
     marginTop: 10,
-    padding: 10
+  },
+
+  whiteBackground: {
+    backgroundColor: colors.secondaryTwo,
+  },
+
+  cardWrapper: {
+    padding: 10,
+    backgroundColor: colors.secondaryOne,
+  },
+
+  //
+  // Audios components
+  //
+  audioList: {
+    marginTop: 5,
+  },
+
+  audio: {
+    // marginTop: 10,
+    padding: 10,
   },
 
   //
@@ -51,6 +83,7 @@ const MainStyles = StyleSheet.create({
     marginTop: 100,
     alignSelf: 'center',
     flex: 1,
+    padding: 10,
   },
 
   formWrapper: {
@@ -64,35 +97,25 @@ const MainStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primaryTwo,
     borderRadius: 3,
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 5,
     width: 200,
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     color: colors.primaryTwo,
   },
 
-  downloadButton: {
-    width: 200
-  },
-
-  downloadText: {
-    fontSize: 14,
-  },
-
-  progressView: {
-    marginTop: 10,
-  },
-
   label: {
-    color: colors.primaryTwo
+    color: colors.primaryTwo,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 
   //
-  // Button Component
+  // Buttons
   //
   button: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 5,
     padding: 5,
@@ -108,10 +131,55 @@ const MainStyles = StyleSheet.create({
     color: colors.primaryTwo,
   },
 
+  actionButton: {
+    width: 60,
+    height: 60,
+    paddingLeft: 25,
+    paddingRight: 25,
+    marginRight: 10,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+
+  disabledButton: {
+    width: 70,
+    height: 70,
+    paddingLeft: 25,
+    paddingRight: 25,
+    backgroundColor: colors.secondaryOne
+  },
+
+  iconButton: {
+    width: 50,
+    height: 50,
+  },
+
+  deleteButton: {
+    width: 30,
+    height: 30,
+    marginLeft: 25,
+    borderRadius: 20,
+    borderWidth: 0,
+    padding: 0,
+    backgroundColor: colors.secondaryTwo,
+    shadowColor: colors.accentTwo,
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 2
+  },
+
+  downloadButton: {
+    width: 200
+  },
+
+  downloadText: {
+    fontSize: 14,
+  },
+
   //
   // CurrentAudio component
   //
-  currentPlayer: {
+  hero: {
     marginTop: 70,
     marginBottom: 10,
     padding: 5,
@@ -127,23 +195,52 @@ const MainStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  center: {
-    alignSelf: 'center',
+
+  //
+  // Audio component
+  //
+  audioName: {
+    textAlign: 'center',
+    marginBottom: 5,
+    fontSize: 18,
+    fontWeight: 'bold'
   },
 
-  actionButton: {
-    width: 70,
-    height: 70,
-    paddingLeft: 25,
-    paddingRight: 25
+  slider: {
+    shadowColor: colors.accentTwo,
+    shadowOffset: {width: 1, height: 2},
+    shadowOpacity: 0.4,
+    shadowRadius: 1
   },
 
-  disabledButton: {
-    width: 70,
-    height: 70,
-    paddingLeft: 25,
-    paddingRight: 25,
-    backgroundColor: colors.secondaryOne
+  //
+  // Pilas component
+  //
+  pilas: {
+    marginTop: 5,
+    marginBottom: 5,
+    height: 315,
+    backgroundColor: colors.secondaryOne,
+  },
+
+  pila: {
+    marginTop: 10,
+    padding: 10,
+    // backgroundColor: colors.secondaryOne,
+  },
+
+  pilaAudioWrapper: {
+    marginTop: 80,
+    flex: 1,
+  },
+
+  //
+  // Pilas Modal component
+  //
+  repoName: {
+    marginLeft: 20,
+    width: 150,
+    padding: 10
   }
 });
 

@@ -15,6 +15,7 @@ import {Actions} from 'react-native-router-flux';
 
 import Button from './components/button';
 import ImageButton from './components/image_button';
+import styles from './styles/main_styles';
 
 export default class PilasModal extends Component {
   constructor(props) {
@@ -90,24 +91,29 @@ export default class PilasModal extends Component {
 
   _renderRow(rowData, sectionID, rowID) {
     return (
-        <View style={styles.pila}>
-          <Text style={styles.label}>{rowData.name}</Text>
+      <View style={styles.cardWrapper}>
+       <View style={[styles.pila, styles.smallShadow, styles.whiteBackground]}>
+          <Text style={styles.label}>Pila Name:</Text>
+          <Text>{rowData.name}</Text>
 
+          <Text style={styles.label}>Repositories:</Text>
         {
           Object.keys(rowData.repositories).map((repo) => {
             var repo = rowData.repositories[repo];
             return (
-              <TouchableHighlight
-                key={repo.name}
-                style={styles.repoName}
-                underlayColor={'#eeeeee'}
-                onPress={this.uploadToRepo.bind(this, rowData, repo.slug)}>
-                <Text>{repo.name}</Text>
-              </TouchableHighlight>
+              <View key={repo.name} style={styles.row}>
+                <TouchableHighlight
+                  style={styles.button}
+                  underlayColor={'#eeeeee'}
+                  onPress={this.uploadToRepo.bind(this, rowData, repo.slug)}>
+                  <Text>{repo.name}</Text>
+                </TouchableHighlight>
+              </View>
             )
           })
         }
         </View>
+      </View>
     );
   }
 
@@ -121,7 +127,7 @@ export default class PilasModal extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.wrapper}>
+        <View style={styles.pilaAudioWrapper}>
           {progressBar}
 
           <ListView
@@ -129,48 +135,9 @@ export default class PilasModal extends Component {
             dataSource={this.state.dataSource}
             renderRow={this._renderRow.bind(this)}
             enableEmptySections={true}
-            renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator}/>}
           />
         </View>
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  },
-
-  wrapper: {
-    marginTop: 80,
-    flex: 1,
-  },
-
-  pilas: {
-    marginTop: 5,
-  },
-
-  separator: {
-    height: 1,
-    backgroundColor: '#DBDEE3',
-  },
-
-  pila: {
-    marginTop: 10,
-    padding: 10
-  },
-
-  label: {
-    fontSize: 16,
-    color: 'black',
-    fontWeight: 'bold',
-  },
-
-  repoName: {
-    marginLeft: 20,
-    width: 150,
-    padding: 10
-  }
-});

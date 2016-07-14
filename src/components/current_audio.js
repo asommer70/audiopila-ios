@@ -25,7 +25,7 @@ const CurrentAudio = (props) => {
 
   return (
     <View style={styles.center}>
-      <View style={[styles.currentPlayer, styles.bigShadow]}>
+      <View style={[styles.hero, styles.bigShadow]}>
         <Text style={styles.name}>{props.playing ? 'Currently Playing:' : 'Last Played:'}</Text>
         <Text>{props.currentAudio.name}</Text>
 

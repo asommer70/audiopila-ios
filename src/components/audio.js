@@ -9,14 +9,15 @@ var store = require('react-native-simple-store');
 var moment = require('moment');
 
 import ImageButton from './image_button';
+import styles, { colors } from '../styles/main_styles';
 
 export default class Audio extends Component {
   render() {
     var audio = this.props.audio;
 
     return (
-      <View key={audio.name} style={styles.audio}>
-        <Text style={styles.name}>{audio.name}</Text>
+      <View key={audio.name} style={[styles.audio, styles.smallShadow, styles.whiteBackground]}>
+        <Text style={[styles.name, styles.audioName]}>{audio.name}</Text>
         <Text>Last Played: {audio.hasOwnProperty('playedTime') == false ? 'Never... yet.' : moment(audio.playedTime).fromNow()}</Text>
 
         <View style={[styles.row, styles.center]}>
@@ -37,8 +38,8 @@ export default class Audio extends Component {
           value={audio.playbackTime}
           maximumValue={audio.duration}
           onSlidingComplete={(value) => this.props.setProgress(value)}
-          minimumTrackTintColor={'#903749'}
-          maximumTrackTintColor={'#54777D'}
+          minimumTrackTintColor={colors.primaryTwo}
+          maximumTrackTintColor={colors.primaryOne}
           thumbImage={require('../img/circle-icon.png')}
           style={styles.slider}
         />
@@ -47,7 +48,7 @@ export default class Audio extends Component {
           <Text>{Math.round(audio.playbackTime)}s/{Math.round(audio.duration)}s</Text>
         </View>
 
-        <View style={styles.row}>
+        <View style={[styles.row, styles.centerRow]}>
           <ImageButton
             imageSrc={require('../img/upload-icon.png')}
             buttonStyle={styles.iconButton}
@@ -64,78 +65,3 @@ export default class Audio extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  center: {
-    alignSelf: 'center'
-  },
-
-  audio: {
-    backgroundColor: '#FEFFE4',
-    padding: 10,
-    shadowColor:'#424242',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.3,
-    shadowRadius: 1
-  },
-
-  name: {
-    textAlign: 'center',
-    color: '#903749',
-    marginBottom: 5,
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-
-  progressView: {
-    marginTop: 10,
-  },
-
-  actionButton: {
-    width: 60,
-    height: 60,
-    paddingLeft: 25,
-    paddingRight: 25,
-    marginRight: 10,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-
-  iconButton: {
-    width: 50,
-    height: 50,
-  },
-
-  deleteButton: {
-    width: 30,
-    height: 30,
-    marginLeft: 25,
-    borderRadius: 20,
-    borderWidth: 0,
-    padding: 0,
-    backgroundColor: '#FEFFE4',
-    shadowColor:'#424242',
-    shadowOffset: {width: 2, height: 2},
-    shadowOpacity: 0.4,
-    shadowRadius: 2
-  },
-
-  slider: {
-    shadowColor:'#424242',
-    shadowOffset: {width: 1, height: 2},
-    shadowOpacity: 0.4,
-    shadowRadius: 1
-  }
-});

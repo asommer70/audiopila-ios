@@ -274,7 +274,7 @@ export default class Audios extends Component {
 
   _renderRow(rowData, sectionID, rowID) {
     return (
-        <View style={styles.audio}>
+        <View style={styles.cardWrapper}>
           <Audio
             audio={rowData}
             setAudio={this.setAudio.bind(this)}

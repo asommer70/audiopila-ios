@@ -96,7 +96,7 @@ export default class Settings extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
-          <View style={styles.formWrapper}>
+          <View style={[styles.formWrapper, styles.smallShadow]}>
 
             <View style={styles.formElement}>
               <Text style={styles.label}>Download Audio File From URL:</Text>
@@ -119,8 +119,8 @@ export default class Settings extends Component {
           </View>
         </View>
 
-        <View style={styles.wrapper}>
-          <View style={styles.formWrapper}>
+        <View style={[styles.wrapper]}>
+          <View style={[styles.formWrapper, styles.smallShadow]}>
 
             <View style={styles.formElement}>
               <Text style={styles.label}>Enter Pila URL for HTTP Sync:</Text>

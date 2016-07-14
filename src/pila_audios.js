@@ -16,6 +16,7 @@ var moment = require('moment');
 import Button from './components/button';
 import ImageButton from './components/image_button';
 import PilaApi from './lib/pila_api';
+import styles from './styles/main_styles';
 
 export default class PilaAudios extends Component {
   constructor(props) {
@@ -100,7 +101,8 @@ export default class PilaAudios extends Component {
 
   _renderRow(rowData, sectionID, rowID) {
     return (
-        <View style={styles.pila}>
+      <View style={styles.cardWrapper}>
+       <View style={[styles.pila, styles.smallShadow, styles.whiteBackground]}>
           <Text style={styles.label}>Name:</Text>
           <Text>{rowData.name}</Text>
           <Text style={styles.label}>Playback Time:</Text>
@@ -111,12 +113,6 @@ export default class PilaAudios extends Component {
           <Text>{rowData.path}</Text>
 
           <View style={styles.row}>
-            <ImageButton
-              imageSrc={require('./img/download-icon.png')}
-              buttonStyle={styles.actionButton}
-              onPress={this.download.bind(this, rowData.slug)}
-            />
-
             <ImageButton
               imageSrc={require('./img/backward-icon.png')}
               buttonStyle={styles.actionButton}
@@ -141,7 +137,16 @@ export default class PilaAudios extends Component {
               onPress={this.sendAction.bind(this, 'forward', rowData.slug)}
             />
           </View>
+
+          <View style={styles.center}>
+            <ImageButton
+              imageSrc={require('./img/download-icon.png')}
+              buttonStyle={styles.actionButton}
+              onPress={this.download.bind(this, rowData.slug)}
+            />
+          </View>
         </View>
+      </View>
     );
   }
 
@@ -155,81 +160,17 @@ export default class PilaAudios extends Component {
 
     return(
       <View style={styles.container}>
-        <View style={styles.wrapper}>
+        <View style={styles.pilaAudioWrapper}>
           {progressBar}
+
           <ListView
             style={styles.pilas}
             dataSource={this.state.dataSource}
             renderRow={this._renderRow.bind(this)}
             enableEmptySections={true}
-            renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator}/>}
           />
         </View>
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 60
-  },
-
-  row: {
-    flexDirection: 'row'
-  },
-
-  wrapper: {
-    marginTop: 20,
-    flex: 1,
-  },
-
-  center: {
-    alignSelf: 'center'
-  },
-
-  pilas: {
-    marginTop: 5,
-  },
-
-  separator: {
-    height: 1,
-    backgroundColor: '#DBDEE3',
-  },
-
-  lastPila: {
-    marginTop: 5,
-    padding: 10,
-    width: 300,
-    borderWidth: 1,
-    borderColor: '#424242',
-    shadowColor:'#424242',
-    shadowOffset: {width: 3, height: 7},
-    shadowOpacity: 0.4,
-    shadowRadius: 5
-  },
-
-  pila: {
-    marginTop: 10,
-    padding: 10,
-  },
-
-  label: {
-    fontSize: 16,
-    color: 'black',
-    fontWeight: 'bold',
-    marginTop: 5
-  },
-
-  actionButton: {
-    width: 40,
-    paddingLeft: 25,
-    paddingRight: 25,
-    marginRight: 10
-  },
-
-  progressView: {
-    marginTop: 10,
-  }
-});
