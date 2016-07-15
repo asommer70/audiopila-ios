@@ -224,9 +224,8 @@ export default class Audios extends Component {
               // Setting the name too because it didn't seem to refresh without it for whatever reason...
               audios[this.state.currentAudio.slug].name = audios[this.state.currentAudio.slug].name + ' ';
 
-              this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios) });
+              this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios), playing: false });
             });
-            this.setState({playing: false});
           });
           this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }

@@ -15,7 +15,7 @@ import {Actions} from 'react-native-router-flux';
 
 import Button from './components/button';
 import ImageButton from './components/image_button';
-import styles from './styles/main_styles';
+import styles, { colors } from './styles/main_styles';
 
 export default class PilasModal extends Component {
   constructor(props) {
@@ -112,7 +112,7 @@ export default class PilasModal extends Component {
   render() {
     var progressBar;
     if (this.state.uploading) {
-      progressBar = <ProgressViewIOS style={styles.progressView} progress={this.getProgress(0)}/>;
+      progressBar = <ProgressViewIOS style={styles.progressView} progressTintColor={colors.primaryTwo} progress={this.getProgress(0)}/>;
     } else {
       progressBar = <View/>;
     }
