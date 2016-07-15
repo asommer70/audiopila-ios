@@ -10,6 +10,7 @@ var RNFS = require('react-native-fs');
 var Sound = require('react-native-sound');
 var store = require('react-native-simple-store');
 import {Actions} from 'react-native-router-flux';
+import MusicControl from 'react-native-music-control';
 
 import Button from './components/button';
 import ImageButton from './components/image_button';
@@ -32,6 +33,35 @@ export default class Audios extends Component {
     }
 
     this.setAudios();
+  }
+
+  componentDidMount() {
+    MusicControl.enableBackgroundMode(true);
+    MusicControl.enableControl('pause', true);
+    MusicControl.enableControl('play', true);
+    MusicControl.enableControl('togglePlayPause', true);
+    MusicControl.enableControl('artwork', true);
+    MusicControl.enableControl('skipForward', true, {interval: 5});
+    MusicControl.enableControl('skipBackward', true, {interval: 5});
+
+    MusicControl.on('play', ()=> {
+      console.log('lock play...');
+      this.play();
+    })
+
+    MusicControl.on('pause', ()=> {
+      console.log('lock pause...');
+      this.play();
+      MusicControl.resetNowPlaying();
+    })
+
+    MusicControl.on('togglePlayPause', () => {
+      console.log('lock play/pause...');
+      // this.play();
+    })
+
+    MusicControl.on('skipBackward', () => console.log('skipBackward...'));
+    MusicControl.on('skipForward', () => console.log('skipForward...'));
   }
 
   setAudios() {
@@ -131,6 +161,8 @@ export default class Audios extends Component {
   setCurrentAudio(audioFile, playNow) {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
       audio.name = audioFile.name;
+      audio.setCategory('Ambient');
+      audio.enableInSilenceMode = true;
       if (e) {
         this.setState({currentAudio: undefined});
       } else {
@@ -145,10 +177,21 @@ export default class Audios extends Component {
     });
   }
 
-  setProgress(value) {
-    this.setState({playbackTime: value}, () => {
-      this.state.currentAudio.setCurrentTime(value);
-    })
+  setProgress(value, audio) {
+    if (this.state.currentAudio) {
+      this.setState({playbackTime: value}, () => {
+        this.state.currentAudio.setCurrentTime(value);
+      })
+    } else {
+      store.get('audios')
+        .then((audios) => {
+          audios[audio.slug].playbackTime = value;
+          store.save('audios', audios)
+            .then(() => {
+              this.setAudios();
+            })
+        })
+    }
   }
 
   deleteAudio(slug) {
@@ -227,6 +270,23 @@ export default class Audios extends Component {
               this.setState({ audios: audios, dataSource: this.ds.cloneWithRows(audios), playing: false });
             });
           });
+
+          store.get('audios')
+            .then((audios) => {
+              if (audios) {
+                var audio = audios[this.state.currentAudio.slug];
+                MusicControl.setNowPlaying({
+                  title: this.state.currentAudio.name,
+                  artwork: 'https://raw.githubusercontent.com/asommer70/audiopila-ios/master/affinity/exports/icon-60%403x.png',
+                  elapsedPlaybackTime: audio.playbackTime,
+                  playbackDuration: audio.duration,
+                  playbackQueueCount: 1,
+                  playbackQueueIndex: 0,
+                  persistentID: audio.name
+                })
+              }
+            })
+
           this.setState({playing: true, audios: audios, dataSource: this.ds.cloneWithRows(audios)});
         }
         // this.getLastPlayed();
@@ -245,17 +305,11 @@ export default class Audios extends Component {
           audio.playedTime = Date.now();
 
           store.update('audios', audios);
+          store.save('lastPlayed', audio);
 
-          store.get('lastPlayed')
-            .then((lastAudio) => {
-              if (lastAudio) {
-                store.save('lastPlayed', audio)
-              }
-
-              if (callback) {
-                callback();
-              }
-            })
+          if (callback) {
+            callback();
+          }
         }
       })
   }

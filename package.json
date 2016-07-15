@@ -12,8 +12,9 @@
     "react-native-device-info": "^0.9.3",
     "react-native-file-download": "0.0.10",
     "react-native-fs": "^1.5.1",
+    "react-native-music-control": "^0.1.9",
     "react-native-router-flux": "^3.30.0",
     "react-native-simple-store": "^1.0.1",
-    "react-native-sound": "^0.8.3"
+    "react-native-sound": "^0.8.4"
   }
 }

@@ -37,7 +37,7 @@ export default class Audio extends Component {
         <Slider
           value={audio.playbackTime}
           maximumValue={audio.duration}
-          onSlidingComplete={(value) => this.props.setProgress(value)}
+          onSlidingComplete={(value) => this.props.setProgress(value, audio)}
           minimumTrackTintColor={colors.primaryTwo}
           maximumTrackTintColor={colors.primaryOne}
           thumbImage={require('../img/circle-icon.png')}
