@@ -161,8 +161,8 @@ export default class Audios extends Component {
   setCurrentAudio(audioFile, playNow) {
     var audio = new Sound(audioFile.name, RNFS.DocumentDirectoryPath, (e) => {
       audio.name = audioFile.name;
-      audio.setCategory('Ambient');
-      audio.enableInSilenceMode = true;
+      audio.setCategory('Playback');
+      // audio.enableInSilenceMode = true;
       if (e) {
         this.setState({currentAudio: undefined});
       } else {
@@ -280,9 +280,9 @@ export default class Audios extends Component {
                   artwork: 'https://raw.githubusercontent.com/asommer70/audiopila-ios/master/affinity/exports/icon-60%403x.png',
                   elapsedPlaybackTime: audio.playbackTime,
                   playbackDuration: audio.duration,
-                  playbackQueueCount: 1,
-                  playbackQueueIndex: 0,
-                  persistentID: audio.name
+                  // playbackQueueCount: 1,
+                  // playbackQueueIndex: 0,
+                  // persistentID: audio.name
                 })
               }
             })

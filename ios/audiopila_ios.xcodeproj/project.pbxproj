@@ -21,7 +21,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		6616D0D71D389C24005F8A8A /* libMusicControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6616D0C61D389C17005F8A8A /* libMusicControl.a */; };
+		663D467B1D3DCB9F00B605DD /* libMusicControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 663D467A1D3DCB9600B605DD /* libMusicControl.a */; };
 		668933F11D19877000ACEDAE /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668933F01D19875000ACEDAE /* libRNSound.a */; };
 		668933FB1D1988AF00ACEDAE /* libRNAudioPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668933F81D1988A900ACEDAE /* libRNAudioPlayer.a */; };
 		668934021D1989C800ACEDAE /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 668934011D1989C300ACEDAE /* libRNFS.a */; };
@@ -94,9 +94,9 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
-		6616D0C51D389C17005F8A8A /* PBXContainerItemProxy */ = {
+		663D46791D3DCB9600B605DD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6616D0C11D389C16005F8A8A /* MusicControl.xcodeproj */;
+			containerPortal = 663D46751D3DCB9600B605DD /* MusicControl.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = MusicControl;
@@ -179,7 +179,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = audiopila_ios/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = audiopila_ios/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		6616D0C11D389C16005F8A8A /* MusicControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MusicControl.xcodeproj; path = "../node_modules/react-native-music-control/ios/MusicControl.xcodeproj"; sourceTree = "<group>"; };
+		663D46751D3DCB9600B605DD /* MusicControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MusicControl.xcodeproj; path = "../node_modules/react-native-music-control/ios/MusicControl.xcodeproj"; sourceTree = "<group>"; };
 		668933E11D19875000ACEDAE /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		668933F21D1988A900ACEDAE /* RNAudioPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAudioPlayer.xcodeproj; path = "../node_modules/react-native-audioplayer/RNAudioPlayer.xcodeproj"; sourceTree = "<group>"; };
 		668933FC1D1989C200ACEDAE /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
@@ -201,7 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6616D0D71D389C24005F8A8A /* libMusicControl.a in Frameworks */,
+				663D467B1D3DCB9F00B605DD /* libMusicControl.a in Frameworks */,
 				668934101D23E14000ACEDAE /* libRNDeviceInfo.a in Frameworks */,
 				668934091D21AE5F00ACEDAE /* libRNFileDownload.a in Frameworks */,
 				668934021D1989C800ACEDAE /* libRNFS.a in Frameworks */,
@@ -318,10 +318,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6616D0C21D389C16005F8A8A /* Products */ = {
+		663D46761D3DCB9600B605DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6616D0C61D389C17005F8A8A /* libMusicControl.a */,
+				663D467A1D3DCB9600B605DD /* libMusicControl.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -378,7 +378,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				6616D0C11D389C16005F8A8A /* MusicControl.xcodeproj */,
+				663D46751D3DCB9600B605DD /* MusicControl.xcodeproj */,
 				6689340A1D23E13800ACEDAE /* RNDeviceInfo.xcodeproj */,
 				668934031D21AE4F00ACEDAE /* RNFileDownload.xcodeproj */,
 				668933FC1D1989C200ACEDAE /* RNFS.xcodeproj */,
@@ -494,8 +494,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6616D0C21D389C16005F8A8A /* Products */;
-					ProjectRef = 6616D0C11D389C16005F8A8A /* MusicControl.xcodeproj */;
+					ProductGroup = 663D46761D3DCB9600B605DD /* Products */;
+					ProjectRef = 663D46751D3DCB9600B605DD /* MusicControl.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -623,11 +623,11 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		6616D0C61D389C17005F8A8A /* libMusicControl.a */ = {
+		663D467A1D3DCB9600B605DD /* libMusicControl.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libMusicControl.a;
-			remoteRef = 6616D0C51D389C17005F8A8A /* PBXContainerItemProxy */;
+			remoteRef = 663D46791D3DCB9600B605DD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		668933F01D19875000ACEDAE /* libRNSound.a */ = {
