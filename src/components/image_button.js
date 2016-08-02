@@ -13,7 +13,7 @@ class ImageButton extends Component {
   render() {
     var image;
     if (this.props.imageSrc) {
-      image = <Image source={this.props.imageSrc} style={[styles.shareIcon, this.props.imageStyle]} />;
+      image = <Image source={this.props.imageSrc} style={[this.props.imageStyle]} />;
     } else {
       image = <View></View>;
     }

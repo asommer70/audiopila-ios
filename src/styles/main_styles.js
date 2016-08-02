@@ -19,6 +19,12 @@ const MainStyles = StyleSheet.create({
     backgroundColor: colors.secondaryOne,
   },
 
+  scrollContainer: {
+    height: 600,
+    flex: 1,
+    backgroundColor: colors.secondaryOne,
+  },
+
   bigShadow: {
     shadowColor: colors.accentTwo,
     shadowOffset: {width: 3, height: 3},
@@ -81,7 +87,7 @@ const MainStyles = StyleSheet.create({
   // Settings component
   //
   wrapper: {
-    marginTop: 100,
+    // marginTop: 100,
     alignSelf: 'center',
     flex: 1,
     padding: 10,
@@ -89,7 +95,8 @@ const MainStyles = StyleSheet.create({
 
   formWrapper: {
     backgroundColor: colors.secondaryTwo,
-    padding: 20
+    padding: 20,
+    width: 300
   },
 
   input: {
@@ -135,8 +142,6 @@ const MainStyles = StyleSheet.create({
   actionButton: {
     width: 60,
     height: 60,
-    paddingLeft: 25,
-    paddingRight: 25,
     marginRight: 10,
     marginBottom: 20,
     marginTop: 20,
@@ -145,8 +150,6 @@ const MainStyles = StyleSheet.create({
   disabledButton: {
     width: 60,
     height: 60,
-    paddingLeft: 25,
-    paddingRight: 25,
     marginRight: 10,
     backgroundColor: colors.secondaryOne
   },

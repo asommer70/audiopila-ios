@@ -8,7 +8,7 @@
   "dependencies": {
     "moment": "^2.13.0",
     "react": "^15.1.0",
-    "react-native": "^0.27.2",
+    "react-native": "^0.30",
     "react-native-device-info": "^0.9.3",
     "react-native-file-download": "0.0.10",
     "react-native-fs": "^1.5.1",

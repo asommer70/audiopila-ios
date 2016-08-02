@@ -39,8 +39,8 @@ export default class Audios extends Component {
     MusicControl.enableBackgroundMode(true);
     MusicControl.enableControl('pause', true);
     MusicControl.enableControl('play', true);
-    MusicControl.enableControl('togglePlayPause', true);
-    MusicControl.enableControl('artwork', true);
+    // MusicControl.enableControl('togglePlayPause', true);
+    // MusicControl.enableControl('artwork', true);
     MusicControl.enableControl('skipForward', true, {interval: 5});
     MusicControl.enableControl('skipBackward', true, {interval: 5});
 

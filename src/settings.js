@@ -6,7 +6,8 @@ import {
   TextInput,
   Alert,
   ProgressViewIOS,
-  Platform
+  Platform,
+  ScrollView
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 var RNFS = require('react-native-fs');
@@ -90,52 +91,57 @@ export default class Settings extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <View style={[styles.formWrapper, styles.smallShadow]}>
+        <ScrollView
+          automaticallyAdjustContentInsets={true}
+          scrollEventThrottle={200}
+          style={styles.scrollContainer}>
 
-            <View style={styles.formElement}>
-              <Text style={styles.label}>Download Audio File From URL:</Text>
-              <TextInput
-                style={styles.input}
-                onFocus={() => this.setState({downloading: true})}
-                onChangeText={ (text) => this.setState({ downloadUrl: text }) }
-                value={this.state.downloadUrl}
-              />
+          <View style={[styles.wrapper, {marginTop: 100}]}>
+            <View style={[styles.formWrapper, styles.smallShadow]}>
+
+              <View style={styles.formElement}>
+                <Text style={styles.label}>Download Audio File From URL:</Text>
+                <TextInput
+                  style={styles.input}
+                  onFocus={() => this.setState({downloading: true})}
+                  onChangeText={ (text) => this.setState({ downloadUrl: text }) }
+                  value={this.state.downloadUrl}
+                />
+              </View>
+
+              <Button
+                style={styles.downloadButton}
+                text={'Download File'}
+                onPress={this.downloadFile.bind(this)}
+                textStyle={styles.downloadText}
+                buttonStyle={styles.downloadButton} />
+
+              {progressBar}
             </View>
-
-            <Button
-              style={styles.downloadButton}
-              text={'Download File'}
-              onPress={this.downloadFile.bind(this)}
-              textStyle={styles.downloadText}
-              buttonStyle={styles.downloadButton} />
-
-            {progressBar}
           </View>
-        </View>
 
-        <View style={[styles.wrapper]}>
-          <View style={[styles.formWrapper, styles.smallShadow]}>
+          <View style={[styles.wrapper, {marginBottom: 400}]}>
+            <View style={[styles.formWrapper, styles.smallShadow]}>
 
-            <View style={styles.formElement}>
-              <Text style={styles.label}>Enter Pila URL for HTTP Sync:</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={ (text) => this.setState({ httpSyncUrl: text }) }
-                value={this.state.httpSyncUrl}
-              />
+              <View style={styles.formElement}>
+                <Text style={styles.label}>Enter Pila URL for HTTP Sync:</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={ (text) => this.setState({ httpSyncUrl: text }) }
+                  value={this.state.httpSyncUrl}
+                />
+              </View>
+
+              <Button
+                style={styles.downloadButton}
+                text={'Sync To Pila'}
+                onPress={this.syncToUrl.bind(this)}
+                textStyle={styles.downloadText}
+                buttonStyle={styles.downloadButton} />
             </View>
-
-            <Button
-              style={styles.downloadButton}
-              text={'Sync To Pila'}
-              onPress={this.syncToUrl.bind(this)}
-              textStyle={styles.downloadText}
-              buttonStyle={styles.downloadButton} />
           </View>
-        </View>
-      </View>
+
+        </ScrollView>
     );
   }
 }
