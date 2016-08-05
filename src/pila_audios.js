@@ -41,7 +41,7 @@ export default class PilaAudios extends Component {
       var ext = audio.name.substr(audio.name.length - 4);
       if (/\.mp3|\.m4a|\.mp4/g.exec(ext) !== null) {
         // this.updateProgress(info.totalBytesWritten / info.totalBytesExpectedToWrite);
-
+        console.log('audio.httpUrl:', audio.httpUrl);
         RNFS.downloadFile({
           fromUrl: audio.httpUrl,
           toFile: RNFS.DocumentDirectoryPath + '/' + audio.name,
@@ -49,6 +49,7 @@ export default class PilaAudios extends Component {
           progress: (res) => {this.updateProgress(res.bytesWritten / res.contentLength)}
         })
         .then((response) => {
+          console.log('response:', response);
           Actions.audios({type: 'reset', download: true, audio: audio});
         })
         .catch((error) => {

@@ -3,7 +3,7 @@ var store = require('react-native-simple-store');
 var FileDownload = require('react-native-file-download');
 var DeviceInfo = require('react-native-device-info');
 
-const DEVICE_NAME = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+const DEVICE_NAME = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').replace(/'/, '').toLocaleLowerCase();
 
 export default class PilaApi {
   static syncToUrl(url, callback) {

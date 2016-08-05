@@ -41,7 +41,7 @@ export default class Pilas extends Component {
                 if (pilas) {
 
                   // Remove this device from the pilas list.
-                  var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').toLocaleLowerCase();
+                  var me = DeviceInfo.getDeviceName().replace(/\s|%20/g, '_').replace(/'/, '').toLocaleLowerCase();
                   if (pilas[me] != undefined) {
                     delete pilas[me];
                   }
